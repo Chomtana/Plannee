@@ -1,2 +1,0 @@
-# Plannee
-Created with CodeSandbox
