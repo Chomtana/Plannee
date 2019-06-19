@@ -35,7 +35,7 @@ export default function Main() {
             </>
           }
         >
-          <RecordItem />
+          <RecordItem category="dsadassa" note="dsaasdasd" />
 
           <hr />
         </UICard>
