@@ -17,13 +17,20 @@ import { merge } from "lodash";
 import InlineInput from "../InlineInput";
 import NotEditing from "./NotEditing";
 import Editing from "./Editing";
+import { useDispatch } from 'react-redux';
 
 export default function RecordItem(props) {
   const [editing, setEditing] = useState(false);
+  const dispatch = useDispatch()
 
   return (
-    <VBox>
-      <NotEditing {...props} show={!editing} onEdit={()=>setEditing(true)}></NotEditing>
+    <VBox {...props}>
+      <NotEditing
+        {...props} 
+        show={!editing} 
+        onEdit={()=>setEditing(true)} 
+        onDelete={()=>dispatch({type:"delete_record",i:props.i})}
+      ></NotEditing>
 
       <Editing 
         {...props} 
@@ -34,6 +41,7 @@ export default function RecordItem(props) {
         onCancel={()=>{
           setEditing(false)
         }}
+        change_categories_i={props.change_categories_i}
       ></Editing>
     </VBox>
   );

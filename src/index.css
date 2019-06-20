@@ -21,6 +21,10 @@ hr {
   border-top: 1px solid #ccc;
 }
 
+.MuiButton-text {
+  white-space: nowrap;
+}
+
 /*
 .MuiButtonBase-root {
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,

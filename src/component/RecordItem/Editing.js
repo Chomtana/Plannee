@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LCRBox from "../LCRBox";
 import VBox from "../VBox";
 import HBox from "../HBox";
@@ -24,20 +24,26 @@ export default function Editing(props) {
   const [category,setCategory] = useState(record.category);
   const [note,setNote] = useState(record.note);
   const [value,setValue] = useState(record.value);
+
+  useEffect(()=>{
+    setCategory(record.category)
+    setNote(record.note)
+    setValue(record.value)
+  },[record])
   
 
   return (<>
-    {props.show &&
+    {(props.show || record.isnew) &&
       <VBox>
         <LCRBox
           left={
-            <div style={{ alignSelf: "flex-start", marginTop: 3 }}>
+            <div style={{ alignSelf: "flex-start" }}>
               <FastfoodIcon style={{ marginRight: 5 }} />
             </div>
           }
           center={
             <VBox>
-              <div>{category}</div>
+              <ButtonBase style={{justifyContent:"left", color:"royalblue"}} onClick={()=>props.changeCategory_i(props.i)}>{category || "เลือกหมวดหมู๋"}</ButtonBase>
               <InlineInput value={note} onChange={(e)=>setNote(e.target.value)} />
             </VBox>
           }
@@ -50,7 +56,7 @@ export default function Editing(props) {
               }}
             >
               <HBox>
-                <InlineInput value={value} style={{ minWidth: 60 }} onChange={(e)=>setValue(e.target.value)} />
+                <InlineInput value={value || ""} style={{ minWidth: 60 }} onChange={(e)=>setValue(e.target.value)} />
                 <div>บาท</div>
               </HBox>
             </div>
@@ -60,8 +66,13 @@ export default function Editing(props) {
         <HBox>
           <center>
             <Button size="medium" style={{ color: "darkred" }} onClick={()=>{
-              setNote(record.note); setCategory(record.category); setValue(record.value);
-              props.onCancel(record);
+              if (!record.isnew) {
+                setNote(record.note); setCategory(record.category); setValue(record.value);
+                props.onCancel(record);
+              } else {
+                dispatch({type: "delete_record", i: props.i})
+                props.onCancel(record);
+              }
             }}>
               <CancelIcon />
               &nbsp;ยกเลิก

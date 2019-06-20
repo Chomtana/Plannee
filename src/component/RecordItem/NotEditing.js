@@ -21,7 +21,7 @@ export default function NotEditing(props) {
   const record = useSelector(state => state.records[props.i]);
 
   return (<>
-    {props.show &&
+    {(props.show && !record.isnew) &&
       <VBox>
         <ButtonBase
           style={{ textAlign: "left" }}
@@ -54,7 +54,7 @@ export default function NotEditing(props) {
         </ButtonBase>
 
         <Collapse in={showAction}>
-          <HBox>
+          <HBox style={{marginBottom:5}}>
             <center>
               <Button size="medium" style={{ color: "darkred" }} onClick={props.onDelete}>
                 <DeleteIcon />

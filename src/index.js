@@ -6,26 +6,33 @@ import MainLayout from "./layout/MainLayout";
 import "./index.css";
 import Main from "./screens/Main";
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+//import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { createStore } from "redux";
 import { Provider } from 'react-redux'
 import reducer from './reducer'
+import Route from './router/Route';
 
-const store = createStore(reducer)
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 function App() {
   return (
     <Provider store={store}>
       <div className="App">
         <MainLayout>
-          <Router>
-            <Route exact path="/" component={Main} />
-          </Router>
+          <Route exact path={[]} component={Main} />
         </MainLayout>
       </div>
     </Provider>
   );
 }
 
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+function startApp() {
+  const rootElement = document.getElementById("root");
+  ReactDOM.render(<App />, rootElement);
+}
+
+if(window.cordova) {
+  document.addEventListener('deviceready', startApp, false);
+} else {
+  startApp();
+}
