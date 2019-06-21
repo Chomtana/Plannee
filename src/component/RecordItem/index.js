@@ -26,19 +26,19 @@ export default function RecordItem(props) {
   return (
     <VBox {...props}>
       <NotEditing
-        {...props} 
-        show={!editing} 
-        onEdit={()=>setEditing(true)} 
-        onDelete={()=>dispatch({type:"delete_record",i:props.i})}
+        {...props}
+        show={!editing}
+        onEdit={() => setEditing(true)}
+        onDelete={() => dispatch({ type: "delete_record", i: props.i })}
       ></NotEditing>
 
-      <Editing 
-        {...props} 
-        show={editing} 
-        onSubmit={()=>{
+      <Editing
+        {...props}
+        show={editing}
+        onSubmit={() => {
           setEditing(false)
         }}
-        onCancel={()=>{
+        onCancel={() => {
           setEditing(false)
         }}
         change_categories_i={props.change_categories_i}

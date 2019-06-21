@@ -28,5 +28,4 @@ export default function Route(props) {
 
   return show ? <props.component /> : <></>
 
-  
 }
