@@ -1,6 +1,6 @@
 import React from 'react'
 
-import MaterialIcon from '@material-ui/core/icon'
+import MaterialIcon from '@material-ui/core/Icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Icon({ icon, type, size, color, bgColor }) {
