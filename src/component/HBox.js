@@ -10,7 +10,7 @@ export default function HBox(props) {
     if (!child) return null;
 
     if (child.props) {
-      if (child.props.notfluid) {
+      if (props.notfluid) {
         eachGrow.push(0);
       } else {
         if (typeof child.props.ratio === "number") {

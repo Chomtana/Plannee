@@ -25,6 +25,14 @@ hr {
   white-space: nowrap;
 }
 
+.MuiDialog-paper {
+  margin: 20px !important;
+}
+
+.MuiDialog-paperFullWidth {
+  width: calc(100% - 40px) !important;
+}
+
 /*
 .MuiButtonBase-root {
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,

@@ -11,14 +11,18 @@ import { createStore } from "redux";
 import { Provider } from 'react-redux'
 import reducer from './reducer'
 import Route from './router/Route';
+import Login_page from './screens/Login_page';
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
+require("./initializeFa")
 
 function App() {
   return (
     <Provider store={store}>
       <div className="App">
         <MainLayout>
+          <Route exact path={["login"]} component={Login_page} />
           <Route exact path={[]} component={Main} />
         </MainLayout>
       </div>
