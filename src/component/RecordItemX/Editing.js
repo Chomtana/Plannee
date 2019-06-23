@@ -16,12 +16,13 @@ import InlineInput from "../InlineInput";
 import NotEditing from "./NotEditing";
 
 import {useSelector, useDispatch} from 'react-redux'
+import RefContainer from './../../refsystem/RefContainer';
 
 export default function Editing(props) {
   const record = useSelector(state => state.records[props.i]);
   const dispatch = useDispatch()
 
-  const [category,setCategory] = useState(record.category);
+  /*const [category,setCategory] = useState(record.category);
   const [note,setNote] = useState(record.note);
   const [value,setValue] = useState(record.value);
 
@@ -29,11 +30,13 @@ export default function Editing(props) {
     setCategory(record.category)
     setNote(record.note)
     setValue(record.value)
-  },[record])
+  },[record])*/
+
+  const refs = new RefContainer(props);
   
 
   return (<>
-    {(props.show || record.isnew) &&
+    {(props.show || refs.record().isnew) &&
       <VBox>
         <LCRBox
           left={
@@ -43,8 +46,8 @@ export default function Editing(props) {
           }
           center={
             <VBox>
-              <ButtonBase style={{justifyContent:"left", color:"royalblue"}} onClick={()=>props.changeCategory_ref(props.i)}>{category || "เลือกหมวดหมู๋"}</ButtonBase>
-              <InlineInput value={note} onChange={(e)=>setNote(e.target.value)} />
+              <ButtonBase style={{justifyContent:"left", color:"royalblue"}} onClick={()=>props.changeCategory_ref(refs.category)}>{refs.category.current || "เลือกหมวดหมู๋"}</ButtonBase>
+              <InlineInput value={refs.note.current} onChange={(e)=>refs.note.stage(e.target.value)} />
             </VBox>
           }
           right={
@@ -56,7 +59,7 @@ export default function Editing(props) {
               }}
             >
               <HBox>
-                <InlineInput value={value || ""} style={{ minWidth: 60 }} onChange={(e)=>setValue(e.target.value)} />
+                <InlineInput value={refs.value.current || ""} style={{ minWidth: 60 }} onChange={(e)=>refs.value.stage(e.target.value)} />
                 <div>บาท</div>
               </HBox>
             </div>
@@ -66,11 +69,11 @@ export default function Editing(props) {
         <HBox>
           <center>
             <Button size="medium" style={{ color: "darkred" }} onClick={()=>{
-              if (!record.isnew) {
-                setNote(record.note); setCategory(record.category); setValue(record.value);
+              if (!refs.record("isnew")()) {
+                refs.note.reset(); refs.category.reset(); refs.value.reset();
                 props.onCancel(record);
               } else {
-                dispatch({type: "delete_record", i: props.i})
+                refs.record.pop();
                 props.onCancel(record);
               }
             }}>
@@ -80,9 +83,11 @@ export default function Editing(props) {
           </center>
           <center>
             <Button size="medium" style={{ color: "darkblue" }} onClick={()=>{
-              var newrecord = {category, note, value}
-              dispatch({type:"change_record", i:props.i, data:newrecord})
-              props.onSubmit(newrecord)
+              //console.log("asdasdasd")
+              //refs.note.commit(); refs.category.commit(); refs.value.commit(); refs.record("isnew").set(false);
+              refs.record("isnew").stage(false);
+              refs.record.commit();
+              props.onSubmit(refs.record())
             }}>
               <OKIcon />
               &nbsp;ตกลง
