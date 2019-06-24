@@ -14,7 +14,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 export default function NotEditing(props) {
   const [showAction, setShowAction] = useState(false);
@@ -54,7 +54,7 @@ export default function NotEditing(props) {
         </ButtonBase>
 
         <Collapse in={showAction}>
-          <HBox style={{marginBottom:5}}>
+          <HBox style={{ marginBottom: 5 }}>
             <center>
               <Button size="medium" style={{ color: "darkred" }} onClick={props.onDelete}>
                 <DeleteIcon />

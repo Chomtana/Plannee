@@ -19,30 +19,24 @@ import NotEditing from "./NotEditing";
 import Editing from "./Editing";
 import { useDispatch } from 'react-redux';
 
-export default function RecordItem(props) {
+export default function ProfileContent(props) {
   const [editing, setEditing] = useState(false);
   const dispatch = useDispatch()
-
   return (
     <VBox {...props}>
       <NotEditing
         {...props}
         show={!editing}
-        onEdit={() => setEditing(true)}
-        onDelete={() => dispatch({ type: "delete_record", i: props.i })}
-      ></NotEditing>
-
+        onEditing={() => setEditing(true)}
+      />
       <Editing
-        {...props}
         show={editing}
         onSubmit={() => {
+
           setEditing(false)
         }}
-        onCancel={() => {
-          setEditing(false)
-        }}
-        change_categories_i={props.change_categories_i}
-      ></Editing>
+        onCancle={() => setEditing(false)}
+      />
     </VBox>
-  );
+  )
 }

@@ -62,6 +62,15 @@ export const initialState = {
       value: 40
     }
   ],
+  user: {
+    name: 'Pichet',
+    saving: 500,
+    goal: 1000,
+    achivement: [],
+    age: 30,
+    gender: 'Male',
+    email: '1234@gmail.com'
+  },
 
   _route: {
     path: ["login"]
@@ -85,7 +94,7 @@ function appReducer(state = initialState, action) {
         isnew: true
       });
 
-      return {...state,records};
+      return { ...state, records };
     }
     case "change_record": {
       var records = cloneDeep(state.records);
@@ -94,13 +103,19 @@ function appReducer(state = initialState, action) {
         records[action.i].isnew = false;
       }
 
-      return {...state,records};
+      return { ...state, records };
     }
     case "delete_record": {
       var records = cloneDeep(state.records);
       records.splice(action.i)
 
-      return {...state,records};
+      return { ...state, records };
+    }
+
+    case "change_user": {
+      var user = cloneDeep(state.user)
+      user = action.data
+      return { ...state, user }
     }
     case "$Chomtana.RefCommit": {
       let newState = cloneDeep(state);

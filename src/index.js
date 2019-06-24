@@ -5,6 +5,7 @@ import MainLayout from "./layout/MainLayout";
 
 import "./index.css";
 import Main from "./screens/Main";
+import Profile from './screens/Profile';
 
 //import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { createStore } from "redux";
@@ -22,8 +23,12 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <MainLayout>
+<<<<<<< HEAD
+          <Route exact path={[]} component={Profile} />
+=======
           <Route exact path={["login"]} component={Login_page} />
           <Route exact path={[]} component={Main} />
+>>>>>>> 16e84b757535f5d3a2bd55c8e3575a650185796f
         </MainLayout>
       </div>
     </Provider>
@@ -35,7 +40,7 @@ function startApp() {
   ReactDOM.render(<App />, rootElement);
 }
 
-if(window.cordova) {
+if (window.cordova) {
   document.addEventListener('deviceready', startApp, false);
 } else {
   startApp();
