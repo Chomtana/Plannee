@@ -67,7 +67,7 @@ function CategoryItem(props) {
   const confirm = window.confirm;
 
   return (
-    <ButtonBase style={{justifyContent:"left", textAlign:"left", borderBottom: "solid 1px rgb(204, 204, 204)", paddingTop: 5, width: "100%"}} onClick={()=>{refs.category.set(category); refs.choosing_category.set(null);}}>
+    <ButtonBase style={{justifyContent:"left", textAlign:"left", borderBottom: "solid 1px rgb(204, 204, 204)", paddingTop: 5, width: "100%"}} onClick={()=>{refs.category.stage(category); refs.is_choosing.set(null);}}>
       <LCRBox
         left={
           <div style={{marginRight:5}}><Icon icon={category.icon} type={category.icon_type} color="white" bgColor={category.icon_background} size={24} /></div>
@@ -141,7 +141,7 @@ function SelectCategoriesDialog(props) {
           >
             เพิ่มหมวดหมู่
           </Button>
-          <Button onClick={()=>refs.choosing_category.set(null)} color="secondary">
+          <Button onClick={()=>refs.is_choosing.set(false)} color="secondary">
             ยกเลิก
           </Button>
         </DialogActions>

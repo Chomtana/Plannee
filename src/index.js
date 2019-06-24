@@ -13,7 +13,7 @@ import reducer from './reducer'
 import Route from './router/Route';
 import Login_page from './screens/Login_page';
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+import store from './store'
 
 require("./initializeFa")
 

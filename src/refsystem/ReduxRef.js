@@ -1,7 +1,6 @@
 import Ref, { RefExtension } from "./Ref";
 import { useSelector, useDispatch } from "react-redux";
 import { get, set, cloneDeep } from "lodash";
-import { useState } from "react";
 import useSelectorRef from "./useSelectorRef";
 export class ReduxRefExtension extends RefExtension {
     constructor(rootRef, parentRef, targetExtension) {
@@ -20,10 +19,13 @@ export class ReduxRefExtension extends RefExtension {
     getCurrent() {
         return get(this.parentRef.getCurrent(), this.targetExtension);
     }
-    stage(newvalue) {
+    stage(newvalue, path = []) {
         var curr_root_var = cloneDeep(this.rootRef.getCurrent());
-        set(curr_root_var, this.targetExtensionFromRoot, newvalue);
-        this.rootRef.stage(curr_root_var);
+        set(curr_root_var, this.targetExtensionFromRoot, cloneDeep(newvalue));
+        this.rootRef.stage(curr_root_var, [
+            ...this.targetExtensionFromRoot,
+            ...path
+        ]);
     }
     commit(message, path = []) {
         this.rootRef.commit(message, [...this.targetExtensionFromRoot, ...path]);
@@ -42,9 +44,15 @@ export default class ReduxRef extends Ref {
             }
             return curr;
         }
-        this.selector_result = useSelector(state => get(state, this.target));
-        [this.current_var, this.set_current_var] = useState(this.selector_result);
         this.dispatch = useDispatch();
+        this.selector_result = useSelector(state => get(state, this.target));
+        //[this.current_var, this.set_current_var] = useState(this.selector_result);
+        this.current_var = useSelector(state => get(state, ["__chomtana_ref_stage", ...this.target]));
+        //console.log(this.current_var);
+        if (typeof this.current_var === "undefined" &&
+            typeof this.selector_result !== "undefined") {
+            this.stage(this.selector_result);
+        }
     }
     performNext(query) {
         return new ReduxRefExtension(this, this, query);
@@ -65,10 +73,13 @@ export default class ReduxRef extends Ref {
             return this.staging_var;
         }
     }
-    stage(newvalue) {
-        var setvalue = cloneDeep(newvalue);
-        this.set_current_var(setvalue);
-        this.staging_var = setvalue;
+    stage(newvalue, path = []) {
+        this.dispatch({
+            type: "$Chomtana.RefStage",
+            path: [...this.target, ...path],
+            value: path.length > 0 ? get(newvalue, path) : newvalue
+        });
+        this.staging_var = newvalue;
     }
     commit(message, path = []) {
         /*console.log(

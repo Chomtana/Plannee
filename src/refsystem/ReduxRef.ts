@@ -35,10 +35,13 @@ export class ReduxRefExtension extends RefExtension {
   public getCurrent() {
     return get(this.parentRef.getCurrent(), this.targetExtension);
   }
-  public stage(newvalue: any) {
+  public stage(newvalue: any, path: Array<string> = []) {
     var curr_root_var = cloneDeep(this.rootRef.getCurrent());
-    set(curr_root_var, this.targetExtensionFromRoot, newvalue);
-    this.rootRef.stage(curr_root_var);
+    set(curr_root_var, this.targetExtensionFromRoot, cloneDeep(newvalue));
+    this.rootRef.stage(curr_root_var, [
+      ...this.targetExtensionFromRoot,
+      ...path
+    ]);
   }
   public commit(message?: any, path: Array<string> = []) {
     this.rootRef.commit(message, [...this.targetExtensionFromRoot, ...path]);
@@ -52,7 +55,6 @@ export class ReduxRefExtension extends RefExtension {
 export default class ReduxRef extends Ref {
   private selector_result;
   private current_var;
-  private set_current_var;
   private dispatch;
 
   //for react non-sense setState async fixing
@@ -70,9 +72,20 @@ export default class ReduxRef extends Ref {
       return curr;
     }
 
-    this.selector_result = useSelector(state => get(state, this.target));
-    [this.current_var, this.set_current_var] = useState(this.selector_result);
     this.dispatch = useDispatch();
+
+    this.selector_result = useSelector(state => get(state, this.target));
+    //[this.current_var, this.set_current_var] = useState(this.selector_result);
+    this.current_var = useSelector(state =>
+      get(state, ["__chomtana_ref_stage", ...this.target])
+    );
+    //console.log(this.current_var);
+    if (
+      typeof this.current_var === "undefined" &&
+      typeof this.selector_result !== "undefined"
+    ) {
+      this.stage(this.selector_result);
+    }
   }
 
   protected performNext(query: any) {
@@ -92,10 +105,13 @@ export default class ReduxRef extends Ref {
       return this.staging_var;
     }
   }
-  public stage(newvalue: any) {
-    var setvalue = cloneDeep(newvalue);
-    this.set_current_var(setvalue);
-    this.staging_var = setvalue;
+  public stage(newvalue: any, path: Array<string> = []) {
+    this.dispatch({
+      type: "$Chomtana.RefStage",
+      path: [...this.target, ...path],
+      value: path.length > 0 ? get(newvalue, path) : newvalue
+    });
+    this.staging_var = newvalue;
   }
   public commit(message?: any, path: Array<string> = []) {
     /*console.log(
