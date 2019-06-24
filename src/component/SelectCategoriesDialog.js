@@ -16,6 +16,7 @@ import { ButtonBase } from '@material-ui/core';
 import Icon from './Icon';
 import RefContainer from './../refsystem/RefContainer';
 import useSelectorRef from '../refsystem/useSelectorRef';
+import useGlobalRef from '../refsystem/useGlobalRef';
 
 const styles = theme => ({
   root: {
@@ -106,7 +107,7 @@ function CategoryItem(props) {
 function SelectCategoriesDialog(props) {
   const categories = useSelector(state => state.categories);
   const refs = new RefContainer(props);
-  refs.categories = useSelectorRef("categories");
+  refs.categories = useGlobalRef("categories");
 
   return (
     <div>

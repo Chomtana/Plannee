@@ -18,12 +18,14 @@ import InlineInput from "../InlineInput";
 import NotEditing from "./NotEditing";
 import Editing from "./Editing";
 import { useDispatch } from 'react-redux';
+import BackButton from "../BackButton";
 
 export default function ProfileContent(props) {
   const [editing, setEditing] = useState(false);
   const dispatch = useDispatch()
   return (
     <VBox {...props}>
+      <BackButton></BackButton>
       <NotEditing
         {...props}
         show={!editing}

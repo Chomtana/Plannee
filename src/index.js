@@ -15,6 +15,7 @@ import Route from './router/Route';
 import Login_page from './screens/Login_page';
 
 import store from './store'
+import Summary from './screens/Summary';
 
 require("./initializeFa")
 
@@ -23,6 +24,7 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <MainLayout>
+          <Route exact path={["summary"]} component={Summary} />
           <Route exact path={["profile"]} component={Profile} />
           <Route exact path={["login"]} component={Login_page} />
           <Route exact path={[]} component={Main} />

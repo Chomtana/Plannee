@@ -29,19 +29,7 @@ import InlineInput from "../component/InlineInput";
 import Icon from "../component/Icon";
 import createGlobalRef from './../refsystem/createGlobalRef';
 import useGlobalRef from './../refsystem/useGlobalRef';
-
-const recordrefs = createGlobalRef("records",[
-  {
-    category: {
-      icon: "fastfood",
-      icon_type: "material",
-      icon_background: "#ffaa00",
-      text: "อาหาร และ เครื่องดื่ม"
-    },
-    note: "กินข้าว ICanteen",
-    value: 40
-  }
-])
+import Link from './../router/Link';
 
 function CategoryIcon(props) {
   const refs = new RefContainer(props);
@@ -302,6 +290,9 @@ function UICard_Summary(props) {
         <UICard_Summary_Income {...refs}></UICard_Summary_Income>
         <UICard_Summary_Expense {...refs}></UICard_Summary_Expense>
         <UICard_Summary_Remaining {...refs}></UICard_Summary_Remaining>
+      </VBox>
+      <VBox>
+        <Link to={["summary"]}><Button style={{width:"100%", marginTop: 5}} variant="contained" color="primary">ดูสรุปอย่างละเอียด</Button></Link>
       </VBox>
     </UICard>
   )
