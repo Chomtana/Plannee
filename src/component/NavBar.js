@@ -9,6 +9,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Link from './../router/Link';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,7 +78,7 @@ export default function NavBar({ children }) {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <Link to={["profile"]}><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>

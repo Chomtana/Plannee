@@ -23,12 +23,9 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <MainLayout>
-<<<<<<< HEAD
-          <Route exact path={[]} component={Profile} />
-=======
+          <Route exact path={["profile"]} component={Profile} />
           <Route exact path={["login"]} component={Login_page} />
           <Route exact path={[]} component={Main} />
->>>>>>> 16e84b757535f5d3a2bd55c8e3575a650185796f
         </MainLayout>
       </div>
     </Provider>
