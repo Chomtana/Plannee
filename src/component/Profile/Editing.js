@@ -21,26 +21,24 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useSelector, useDispatch } from 'react-redux'
+import { cloneDeep } from 'lodash'
 
 export default function Editing(props) {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
 
-  const auth = true
-  const [anchorEl, setAnchoeEl] = useState(null)
-  const open = Boolean(anchorEl)
-
   const [name, setName] = useState(user.name)
   const saving = user.saving
-  const goal = user.goal
+  const [goal, setGoal] = useState(user.goal)
   const achivement = user.achivement
   const [age, setAge] = useState(user.age)
   const [gender, setGender] = useState(user.gender)
   const [email, setEmail] = useState(user.email)
-
   function checkNumber(s) {
     return /([0-9])$/.test(s) || s === ""
   }
+
+  const percentSaving = (saving / goal) * 100
 
   return (
     <>
@@ -56,11 +54,9 @@ export default function Editing(props) {
               if (checkNumber(e.target.value)) {
                 setAge(e.target.value)
               }
-              else {
-                alert('Pls Enter Number')
-              }
             }
-            } /></h1>
+            } />
+            </h1>
           </HBox>
           <HBox>
             <h1>Gender:
@@ -79,9 +75,29 @@ export default function Editing(props) {
             <h1>Email: <InlineInput value={email} onChange={(e) => setEmail(e.target.value)} /></h1>
           </HBox>
           <HBox>
-            <h1></h1>
-            <h1>Saving: {user.saving}/ Goal: {user.goal}</h1>
+            <div><h1>Achivement: </h1>{
+              user.achivement.map((data, i) => <h1>{data}</h1>)
+            }</div>
           </HBox>
+          <HBox>
+            <h1 style={{ flexBasis: null }}>Saving: {user.saving}/Goal : <InlineInput value={goal} onChange={(e) => {
+              if (checkNumber(e.target.value)) {
+                setGoal(e.target.value)
+              }
+            }} /></h1>
+          </HBox>
+          <div style={{
+            border: '1px solid gray',
+            height: '50px'
+          }}>
+            <div style={{
+              width: `${(percentSaving > 100) ? 100 : percentSaving}%`,
+              backgroundColor: 'green',
+              height: '100%',
+              transition: '0.5s'
+            }}>
+            </div>
+          </div>
           <HBox>
             <center>
               <Button size="medium" style={{ color: "darkred" }}

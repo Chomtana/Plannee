@@ -65,8 +65,8 @@ export const initialState = {
   user: {
     name: 'Pichet',
     saving: 500,
-    goal: 1000,
-    achivement: [],
+    goal: 10000,
+    achivement: ['Saving 500', 'Saving 1000'],
     age: 30,
     gender: 'Male',
     email: '1234@gmail.com'
@@ -82,7 +82,7 @@ export const initialState = {
 };
 
 function appReducer(state = initialState, action) {
-  console.log("reducer",state)
+  console.log("reducer", state)
   switch (action.type) {
     case "add_record": {
       var records = cloneDeep(state.records);
@@ -116,6 +116,7 @@ function appReducer(state = initialState, action) {
       user = action.data
       return { ...state, user }
     }
+
     case "$Chomtana.RefCommit": {
       let newState = cloneDeep(state);
       let newVal = cloneDeep(action.value);
