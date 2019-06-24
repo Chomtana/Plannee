@@ -6,45 +6,45 @@ import Link from './../router/Link';
 class Login_page extends Component {
 
     state = {
-        formError:false,
-        formSuccess:'',
-        formdata:{
-            email:{
-                element:'input',
-                value:'',
-                config:{
-                    name:'email_input',
+        formError: false,
+        formSuccess: '',
+        formdata: {
+            email: {
+                element: 'input',
+                value: '',
+                config: {
+                    name: 'email_input',
                     type: 'email',
                     placeholder: 'Enter your email'
                 },
-                validation:{
+                validation: {
                     required: true,
                     email: true
                 },
                 valid: false,
-                validationMessage:''
+                validationMessage: ''
             },
-            password:{
-                element:'input',
-                value:'',
-                config:{
-                    name:'password_input',
+            password: {
+                element: 'input',
+                value: '',
+                config: {
+                    name: 'password_input',
                     type: 'password',
                     placeholder: 'Enter your password'
                 },
-                validation:{
+                validation: {
                     required: true
                 },
                 valid: false,
-                validationMessage:''
+                validationMessage: ''
             }
         }
 
     }
 
-    updateForm(element){
-        const newFormdata = {...this.state.formdata}
-        const newElement = { ...newFormdata[element.id]}
+    updateForm(element) {
+        const newFormdata = { ...this.state.formdata }
+        const newElement = { ...newFormdata[element.id] }
 
         newElement.value = element.event.target.value;
 
@@ -61,42 +61,40 @@ class Login_page extends Component {
     }
 
 
-    submitForm(event){
+    submitForm(event) {
         event.preventDefault();
         //do sth if email and pass is valid
         // may be I will use firbase for db naja
-        
-        
     }
 
     render() {
         return (
             <div className="container">
-                <div className="signin_wrapper" style={{margin:'100px'}}>
+                <div className="signin_wrapper" style={{ margin: '100px' }}>
 
-                    <form onSubmit={(event)=> this.submitForm(event)}>
+                    <form onSubmit={(event) => this.submitForm(event)}>
 
                         <h2>Please Login</h2>
 
                         <FormField
                             id={'email'}
                             formdata={this.state.formdata.email}
-                            change={(element)=> this.updateForm(element)}
+                            change={(element) => this.updateForm(element)}
                         />
 
                         <FormField
                             id={'password'}
                             formdata={this.state.formdata.password}
-                            change={(element)=> this.updateForm(element)}
+                            change={(element) => this.updateForm(element)}
                         />
-                            { this.state.formError ? 
-                                <div className="error_label">Something is wrong, try again.</div>
-                                :null
-                            }
+                        {this.state.formError ?
+                            <div className="error_label">Something is wrong, try again.</div>
+                            : null
+                        }
                         <Link to={[]}><button>Log in</button></Link>
                     </form>
 
-                </div>     
+                </div>
             </div>
         );
     }

@@ -3,7 +3,7 @@ import ProfileContent from '../component/Profile'
 export default function Profile(props) {
   return (
     <div>
-      <ProfileContent></ProfileContent>
+      <ProfileContent {...props}></ProfileContent>
     </div>
   );
 }
