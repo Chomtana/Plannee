@@ -27,6 +27,21 @@ import OKIcon from "@material-ui/icons/Done";
 import CancelIcon from "@material-ui/icons/Close";
 import InlineInput from "../component/InlineInput";
 import Icon from "../component/Icon";
+import createGlobalRef from './../refsystem/createGlobalRef';
+import useGlobalRef from './../refsystem/useGlobalRef';
+
+const recordrefs = createGlobalRef("records",[
+  {
+    category: {
+      icon: "fastfood",
+      icon_type: "material",
+      icon_background: "#ffaa00",
+      text: "อาหาร และ เครื่องดื่ม"
+    },
+    note: "กินข้าว ICanteen",
+    value: 40
+  }
+])
 
 function CategoryIcon(props) {
   const refs = new RefContainer(props);
@@ -51,6 +66,7 @@ function CategoryIcon(props) {
 
 function Editing(props) {
   const refs = new RefContainer(props);
+  refs.is_choosing = useStateRef(false);
 
   return (<>
     {refs.is_editing() &&
@@ -64,7 +80,7 @@ function Editing(props) {
 
           center={
             <VBox>
-              <ButtonBase style={{ justifyContent: "left", color: "royalblue" }} onClick={() => refs.choosing_category.set(refs.category)}>{refs.category("text").current || "เลือกหมวดหมู่"}</ButtonBase>
+              <ButtonBase style={{ justifyContent: "left", color: "royalblue" }} onClick={()=>refs.is_choosing.set(true)}>{refs.category("text").current || "เลือกหมวดหมู่"}</ButtonBase>
               <InlineInput value={refs.note.current} onChange={(event) => refs.note.stage(event.target.value)}></InlineInput>
             </VBox>
           }
@@ -82,7 +98,7 @@ function Editing(props) {
         <HBox style={{ marginBottom: 5 }}>
           <center>
             <Button size="medium" style={{ color: "darkred" }} onClick={() => {
-              if (refs.record("isnew")()) refs.record.delete(); else refs.record.reset();
+              refs.record.reset();
               refs.is_editing.set(false);
             }}>
               <CancelIcon />
@@ -98,7 +114,7 @@ function Editing(props) {
         </HBox>
 
         <SelectCategoriesDialog
-          open={refs.choosing_category() !== null}
+          open={refs.is_choosing()}
           {...refs}
         ></SelectCategoriesDialog>
       </VBox>
@@ -107,7 +123,6 @@ function Editing(props) {
 
 function NotEditing(props) {
   const refs = new RefContainer(props);
-
   const [showAction, setShowAction] = useState(false);
 
   const category = refs.category();
@@ -201,7 +216,9 @@ function UICard_TodayRecord(props) {
           return <RecordItem
             {...refs}
             record={record}
-            {...record.childRefs()}
+            category={record("category")}
+            note={record("note")}
+            value={record("value")}
             style={{ marginBottom: 5 }}
             force_editing={record.is_staging()}
             key={i}
@@ -295,7 +312,8 @@ export default function Main() {
   const dispatch = useDispatch();
 
   const refs = new RefContainer();
-  refs.records = useSelectorRef("records");
+  //refs.records = useSelectorRef("records");
+  refs.records = useGlobalRef("records");
   refs.choosing_category = useStateRef(null);
 
   console.log(refs.choosing_category())

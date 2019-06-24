@@ -1,4 +1,4 @@
-import { set, cloneDeep } from 'lodash'
+import { set, get, cloneDeep } from 'lodash'
 
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff';
@@ -78,7 +78,8 @@ export const initialState = {
 
   __chomtana_ref_states: {
     _local_next_id: 1
-  }
+  },
+  __chomtana_global_states: {}
 };
 
 function appReducer(state = initialState, action) {
@@ -123,12 +124,29 @@ function appReducer(state = initialState, action) {
       set(newState, action.path, newVal);
       return newState;
     }
+    case "$Chomtana.RefStage": {
+      console.log("startStage", state);
+      let newState = cloneDeep(state);
+      let newVal = cloneDeep(action.value);
+      //console.log(newState, newVal);
+      set(newState, ["__chomtana_ref_stage", ...action.path], newVal);
+      return newState;
+    }
     case "$Chomtana.NewStateRef": {
       let newState = cloneDeep(state);
       newState.__chomtana_ref_states[
         "local_" + newState.__chomtana_ref_states._local_next_id++
       ] = action.value;
       //console.log("dispatched", newState);
+      return newState;
+    }
+    case "$Chomtana.UpdateGlobalState": {
+      let newState = cloneDeep(state);
+      let oldrandomval = get(newState.__chomtana_global_states, action.path);
+      let randomval = Math.random();
+      while (randomval === oldrandomval) randomval = Math.random();
+      set(newState.__chomtana_global_states, action.path, randomval);
+      //console.log("gbnew", newState);
       return newState;
     }
     case "$Chomtana.Router.Link": {

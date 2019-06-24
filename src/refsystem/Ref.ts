@@ -1,4 +1,4 @@
-import { cloneDeep, toPath, merge } from "lodash";
+import { cloneDeep, toPath, merge, isEqual } from "lodash";
 
 //Credit: https://stackoverflow.com/questions/36871299/how-to-extend-function-with-es6-classes
 class ExtensibleFunction extends Function {
@@ -72,12 +72,12 @@ export default abstract class Ref extends ExtensibleFunction {
 
   public abstract get(): any;
   public set(newvalue: any) {
-    this.stage(newvalue);
+    this.stage(cloneDeep(newvalue));
     this.commit();
   }
 
   public abstract getCurrent(): any;
-  public abstract stage(newvalue: any);
+  public abstract stage(newvalue: any, path?: any);
 
   public abstract commit(message?: any, path?: any);
 
@@ -89,7 +89,11 @@ export default abstract class Ref extends ExtensibleFunction {
    * Reset current value to last commit
    */
   public reset() {
-    this.stage(this.get());
+    if (typeof this.get() !== "undefined") {
+      this.stage(this.get());
+    } else {
+      this.delete();
+    }
   }
 
   public makeNotExtension(): Ref {
@@ -238,7 +242,8 @@ export default abstract class Ref extends ExtensibleFunction {
   }
 
   public is_staging() {
-    return this.get() !== this.getCurrent();
+    //console.log(this.get(), this.getCurrent());
+    return !isEqual(this.get(), this.getCurrent());
   }
 }
 
