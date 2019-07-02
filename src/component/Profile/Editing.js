@@ -60,7 +60,7 @@ export default function Editing(props) {
           </HBox>
           <HBox>
             <h1>Gender:
-            <FormControl variant="outlined">
+              <FormControl variant="outlined">
                 <Select
                   native
                   value={gender}

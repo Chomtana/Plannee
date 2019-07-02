@@ -44,3 +44,11 @@ if (window.cordova) {
 } else {
   startApp();
 }
+
+if (window.plugins) {
+  window.plugins.speechRecognition.isRecognitionAvailable(()=>{
+    alert("Available")
+  },()=>{
+    alert("Not available")
+  });
+}

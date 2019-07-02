@@ -1,0 +1,123 @@
+import React from 'react'
+import usePointer from "../usePointer";
+import VBox from '../component/VBox';
+import { ButtonBase } from '@material-ui/core';
+import LCRBox from './../component/LCRBox';
+import HBox from './../component/HBox';
+import Icon from './../component/Icon';
+import UICard from './../component/UICard/index';
+import Button from '@material-ui/core/Button';
+import ReceiveIcon from '@material-ui/icons/CallReceived';
+import AddIcon from '@material-ui/icons/Add';
+
+function NotEditingData({record,category,note,value}) {
+  return (
+  <ButtonBase
+    style={{ textAlign: "left", width: "100%" }}
+    onClick={() => record.mark("showControl",!record.mark("showControl"))}
+  >
+    <LCRBox
+      left={
+        <div style={{ marginRight: 5, alignSelf: "top" }}>
+          dasasdas
+        </div>
+      }
+
+      center={
+        <VBox>
+          <div>{category.text}</div>
+          <div>{note}</div>
+        </VBox>
+      }
+
+      right={
+        <div style={{ alignSelf: "flex-start", whiteSpace: "nowrap", marginLeft: 5 }}>
+          {value} บาท
+      </div>
+      }
+    />
+  </ButtonBase>
+  )
+}
+
+function NotEditingControl() {
+  return (<><div>asdasdasd</div></>)
+}
+
+function NotEditing({ record }) {
+  return (<VBox>
+    <NotEditingData record={record} category={record("category")()} note={record("note")()} value={record("value")()}></NotEditingData>
+    {record.mark("showControl") && <NotEditingControl></NotEditingControl>}
+  </VBox>)
+}
+
+function RecordItem({ record, style }) {
+  return (<VBox style={style}>
+    <NotEditing record={record}></NotEditing>
+  </VBox>)
+}
+
+function UICard_TodayRecord(props) {
+  const records = usePointer("records");
+
+  return (
+    <UICard
+      title={
+        <>
+          วันนี้&nbsp;
+        <span style={{ fontSize: "12pt" }}>19 มิถุนายน 2562</span>
+        </>
+      }
+      {...props}
+    >
+      {records().length > 0 ?
+        records.stage().map((record, i) => {
+          return <RecordItem
+            record={record}
+            style={{ marginBottom: 5 }}
+            key={i}
+          />
+        })
+        : <center>--- ไม่มีรายการ ---</center>
+      }
+
+      <hr />
+
+      <HBox>
+        <center>
+          <Button size="medium" style={{ color: "darkred" }} onClick={() => {
+
+          }}>
+            <ReceiveIcon />
+            &nbsp;รับเงินเข้า
+        </Button>
+        </center>
+        <center>
+          <Button size="medium" style={{ color: "darkblue" }} onClick={() => {
+            records.stage().push(    {
+              category: {
+                icon: "fastfood",
+                icon_type: "material",
+                icon_background: "#ffaa00",
+                text: "อาหาร และ เครื่องดื่ม"
+              },
+              note: "กินข้าว ICanteen",
+              value: 40
+            })
+          }}>
+            <AddIcon />
+            &nbsp;เพิ่มรายการ
+        </Button>
+        </center>
+      </HBox>
+    </UICard>
+  )
+}
+
+export default function Main() {
+  
+
+  return (<>
+    <UICard_TodayRecord></UICard_TodayRecord>
+  </>)
+}
