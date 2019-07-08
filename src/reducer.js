@@ -75,14 +75,10 @@ export const initialState = {
   _route: {
     path: ["login"]
   },
-
-  __chomtana_ref_states: {
-    _local_next_id: 1
-  },
-  __chomtana_global_states: {}
 };
 
 function appReducer(state = initialState, action) {
+  if (!action) return state;
   console.log("reducer", state)
   switch (action.type) {
     case "add_record": {

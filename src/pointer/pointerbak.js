@@ -6,10 +6,15 @@ class BasePointer extends ExtensibleFunction {
   _child = {};
   _hook = {};
   _mark = {};
+  _root = null;
+  _rootPath = [];
 
-  constructor(value, parent, parentkey) {
+  constructor(value, parent, parentkey, options) {
+    if (!options) options = {};
+
     super(x => {
-      if (!x) return this.get();
+      //console.log("called", x);
+      if (typeof x === "undefined") return this.get();
       return this.next(x);
     });
     var thiss = this;
@@ -17,13 +22,23 @@ class BasePointer extends ExtensibleFunction {
     ////console.log(this.appendChainObj.__proto__)
 
     if (typeof value !== "undefined") {
-      this.set(value);
+      this._setLiteForEmptyCase(value);
     } else {
       this._undefined = true;
     }
     this._parent = parent;
     this._parentkey = parentkey;
     ////console.log("parent", parent);
+
+    if (typeof this._parent !== "undefined") {
+      this._root = this._parent._root;
+      //this._rootPath = toPath(this._parent_rootPath);
+      //this._rootPath.push(parentkey)
+    } else {
+      this._root = this;
+    }
+
+    if (options.name) this._name = options.name;
   }
 
   mark(key, value) {
@@ -40,6 +55,18 @@ class BasePointer extends ExtensibleFunction {
     return value;
   }
 
+  childTemplate(value) {
+    return this.mark("$Chomtana$childTemplate", value);
+  }
+
+  template(value) {
+    if (this._parent) {
+      return this._parent.childTemplate(value);
+    } else {
+      return this.mark("$Chomtana$template", value);
+    }
+  }
+
   performHook(name, ...args) {
     if (typeof this._hook[name] !== "undefined") {
       if (
@@ -48,7 +75,9 @@ class BasePointer extends ExtensibleFunction {
       ) {
         for (var f of this._hook[name]) {
           this._mark["$Chomtana$lockHook"] = true;
+          //console.log(f,name);
           f(...args);
+          //console.log(args);
           this._mark["$Chomtana$lockHook"] = false;
         }
       }
@@ -68,6 +97,7 @@ class BasePointer extends ExtensibleFunction {
 
     if (options.unique) {
       if (this._hook[name].indexOf(fn) !== -1) {
+        console.log("unique filtered");
         return;
       }
     }
@@ -111,15 +141,20 @@ class BasePointer extends ExtensibleFunction {
   }
 
   next(target) {
-    if (typeof target !== "object") {
-      if (this._child[target]) return this._child[target];
-      this._child[target] = new this.constructor(undefined, this, target);
-      return this._child[target];
+    target = toPath(target);
+    if (target.length == 1) {
+      if (this._child[target[0]]) return this._child[target[0]];
+      this._child[target[0]] = new this.constructor(undefined, this, target[0]);
+      return this._child[target[0]];
     } else {
       var curr = this;
       for (var x of target) curr = curr.next(x);
       return curr;
     }
+  }
+
+  get parent() {
+    return this._parent;
   }
 
   _backprop_delcache() {
@@ -186,15 +221,28 @@ class BasePointer extends ExtensibleFunction {
       }
     } else {
       ////console.log("delcache");
+      this.performHook("beforeDeleteCache", this);
+      //to perform cache
+      //this._get();
       delete this._cacheVal;
+      //var key = Object.keys(value)[0];
+      //this._cacheVal[key] = value[key];
+      this.performHook("afterDeleteCache", this);
+
+      if (this._parent && this._parentkey) {
+        this.performHook("beforeSetBP", this._cacheVal, oldVal, this, options);
+        this._parent._set(
+          { [this._parentkey]: value },
+          { backpropagate: true },
+          oldVal
+        );
+        this.performHook("afterSetBP", this._cacheVal, oldVal, this, options);
+        //console.log("backpropset", this._parent.get());
+      }
     }
 
     //backpropagate to parent
-    this._backprop_delcache();
-    /*if (this._parent && this._parentkey) {
-      this._parent._set({ [this._parentkey]: value }, { backpropagate: true });
-      //console.log("backpropset", this._parent.get());
-    }*/
+    //this._backprop_delcache();
 
     this.performHook("afterSetDeep", value, oldVal, this, options);
   }
@@ -202,8 +250,51 @@ class BasePointer extends ExtensibleFunction {
   set(value, options) {
     var oldVal = this._get();
     this.performHook("beforeSet", value, oldVal, this, options);
+
     this._set(value, options, oldVal);
+
+    //to perform cache
+    //this._get();
+
+    if (this._parent && this._parentkey) {
+      this.performHook("beforeSetBP", value, oldVal, this, options);
+      this._parent._set({ [this._parentkey]: value }, { backpropagate: true });
+      this.performHook("afterSetBP", value, oldVal, this, options);
+      //console.log("backpropset", this._parent.get());
+    }
+
     this.performHook("afterSet", value, oldVal, this, options);
+  }
+
+  //special optimized version for setting value only if it is empty, it is very destructive
+  _setLiteForEmptyCase(value) {
+    //console.log("run")
+    window.fuck = (window.fuck || 0) + 1;
+    console.log(value);
+    delete this._cacheVal;
+    if (typeof value !== "undefined" && value !== null) {
+      this._prototype = value.prototype || value.__proto__;
+      delete this._prototype.$;
+    } else {
+      delete this._prototype;
+    }
+
+    if (value !== null && typeof value !== "undefined") {
+      if (typeof value === "object" && !value.$isPrimitive) {
+        for (let key in value) {
+          this._child[key] = new this.constructor(value[key], this, key);
+        }
+
+        delete this._primitive;
+      } else {
+        if (typeof value === "object") {
+          ////console.log("value", value);
+          this._primitive = value.valueOf();
+        } else {
+          this._primitive = value;
+        }
+      }
+    }
   }
 
   _setIn_inner(path, value, options) {
@@ -233,8 +324,7 @@ class BasePointer extends ExtensibleFunction {
       if (typeof this._primitive !== "undefined")
         if (!options.clean) return this.newPrimitive(this._primitive);
         else return this._primitive;
-      if (typeof this._prototype === "undefined")
-        this._prototype = Object.prototype;
+      if (typeof this._prototype === "undefined") return null;
       var res = options.clean
         ? Object.create(this._prototype)
         : this.newObject();
@@ -298,20 +388,27 @@ class BasePointer extends ExtensibleFunction {
 
   push(...val) {
     var curr = this.get();
-    this.performHook("beforePush", val, curr, this);
+
     if (Array.isArray(curr)) {
       //console.log(this._lastKey);
       for (var x = 0; x < val.length; x++) {
+        this.performHook("beforePush", val[x], curr, this);
         this._child[curr.length + x] = new this.constructor(
           val[x],
           this,
           curr.length + x
         );
+        this.performHook(
+          "afterPush",
+          val[x],
+          curr,
+          this,
+          this._child[curr.length + x]
+        );
       }
       //curr.push(...val);
-      this._backprop_delcache();
     }
-    this.performHook("afterPush", val, curr, this);
+    this._backprop_delcache();
   }
 
   pop(index) {
@@ -328,7 +425,8 @@ class BasePointer extends ExtensibleFunction {
       delete curr[index];
       this.set(curr);
     }
-    return;
+    this._backprop_delcache();
+    return curr[index];
   }
 
   delete(index) {
@@ -339,6 +437,7 @@ class BasePointer extends ExtensibleFunction {
     if (this._parent) {
       var parentval = this._parent.get();
       if (typeof parentval === "object") {
+        console.log(this._parent.get().length);
         return this._parent.pop(this._parentkey);
       } else {
         throw new Error("Cannot delete since parent is not object.");
@@ -351,11 +450,72 @@ class BasePointer extends ExtensibleFunction {
     }
   }
 
+  isStaging() {
+    return false;
+  }
+
   map(fn) {
     var res = this.get();
     for (var key in res) {
       res[key] = fn(this.next(key), key);
     }
+    return res;
+  }
+
+  getShallow(options) {
+    if (!options) options = {};
+
+    if (this._undefined) return undefined;
+    //if (typeof this._cacheVal !== "undefined") return this._cacheVal;
+    if (typeof this._primitive !== "undefined")
+      if (!options.clean) return this.newPrimitive(this._primitive);
+      else return this._primitive;
+    if (typeof this._prototype === "undefined")
+      this._prototype = Object.prototype;
+
+    var res = [];
+    var counter = 0;
+
+    if (this._prototype.constructor.name === "Array") {
+      var curri = 0;
+      while (typeof this._child[curri] !== "undefined") {
+        var value = this._child[curri];
+        if (value._undefined) break;
+        if (typeof options.start === "undefined" || counter >= options.start) {
+          res.push(value);
+          //console.log(options.start, counter);
+        }
+        curri++;
+        counter++;
+        if (typeof options.limit !== "undefined") {
+          if (res.length >= options.limit) return res;
+        }
+      }
+    } else {
+      var addedcounter = 0;
+
+      for (var key in this._child) {
+        var value = this._child[key];
+        if (value._undefined) continue;
+        if (typeof options.start === "undefined" || counter >= options.start) {
+          res[key] = value;
+          addedcounter++;
+          //console.log(options.start, counter);
+        }
+        if (typeof options.limit !== "undefined") {
+          if (addedcounter >= options.limit) return res;
+        }
+        counter++;
+      }
+    }
+
+    //console.log(res);
+    return res;
+  }
+
+  limit(amount, start) {
+    var res = this.getShallow({ limit: amount, start });
+    //console.log(res);
     return res;
   }
 }
@@ -370,7 +530,7 @@ export default class Pointer extends BasePointer {
     }
 
     this.hook("afterSet", value => this.stage(value));
-    this.hook("afterPush", value => this.stage().push(...value));
+    this.hook("afterPush", value => this.stage().push(value));
     //this.hook("afterDelete", delp => delp.stage().delete());
   }
 
@@ -435,12 +595,15 @@ export default class Pointer extends BasePointer {
   }
 
   getStageRef(path) {
-    if (!this._parent) return this._stageRef.next(path);
-    return this._parent.getStageRef([this._parentkey]);
+    //if (!this._parent) console.log(path);
+    if (!this._parent) return this._stageRef.next(path.reverse());
+    path.push(this._parentkey);
+    return this._parent.getStageRef(path);
   }
 
   stage(value, options) {
     if (typeof value === "undefined") {
+      //console.log("parentkey",this._parentkey);
       return this.getStageRef([]);
     }
     if (this._parent) {
@@ -458,7 +621,21 @@ export default class Pointer extends BasePointer {
   }
 
   commit(msg) {
+    var templatekeys = Object.keys(this.template() || {});
+    var currvalue = this.getCurrent();
+    var filteredvalue = {};
+    if (templatekeys.length > 0) {
+      for (let key in currvalue) {
+        if (templatekeys.indexOf(key) !== -1)
+          filteredvalue[key] = currvalue[key];
+      }
+    }
+
+    this.performHook("beforeCommit", filteredvalue, this, msg);
+    this.performHookBackprop("beforeCommitBP", filteredvalue, this, msg);
     this.set(this.getCurrent());
+    this.performHook("afterCommit", filteredvalue, this, msg);
+    this.performHookBackprop("afterCommitBP", filteredvalue, this, msg);
   }
 
   reset(msg) {
