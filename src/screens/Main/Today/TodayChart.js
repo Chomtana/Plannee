@@ -1,6 +1,6 @@
 import React from "react";
 import HBox from "../../../component/HBox";
-import SummaryChart from "../../../component/SummaryChart2";
+import SummaryChart from "../../../component/SummaryChart";
 import VBox from "./../../../component/VBox";
 import LCRBox from "../../../component/LCRBox";
 
@@ -20,7 +20,7 @@ function ChartText(props) {
   }
 
   return (
-    <VBox>
+    <VBox gap={10}>
       {Object.keys(data).map(category => 
         <LCRBox
           center={<div>{category}</div>}

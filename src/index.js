@@ -16,6 +16,7 @@ import Login_page from './screens/Login_page';
 
 import store from './store'
 import Summary from './screens/Summary';
+import Goal from './screens/Goal/index';
 
 console.log(store);
 
@@ -29,6 +30,8 @@ function App() {
           <Route exact path={["summary"]} component={Summary} />
           <Route exact path={["profile"]} component={Profile} />
           <Route exact path={["login"]} component={Main} />
+          <Route exact path={["goal"]} component={Goal} />
+          <Route exact path={["home"]} component={Main} />
           <Route exact path={[]} component={Main} />
         </MainLayout>
       </div>

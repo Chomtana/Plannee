@@ -17,6 +17,8 @@ import Icon from './Icon';
 import RefContainer from './../refsystem/RefContainer';
 import useSelectorRef from '../refsystem/useSelectorRef';
 import useGlobalRef from '../refsystem/useGlobalRef';
+import usePointer from '../pointer/usePointer';
+import CategoryIcon from './CategoryIcon';
 
 const styles = theme => ({
   root: {
@@ -60,7 +62,7 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 function CategoryItem(props) {
-  const refs = new RefContainer(props);
+  const refs = props;
   const category = refs.category_val();
 
   const [isEditing,setIsEditing] = useState(false);
@@ -68,13 +70,13 @@ function CategoryItem(props) {
   const confirm = window.confirm;
 
   return (
-    <ButtonBase style={{justifyContent:"left", textAlign:"left", borderBottom: "solid 1px rgb(204, 204, 204)", paddingTop: 5, width: "100%"}} onClick={()=>{refs.category.stage(category); refs.is_choosing.set(null);}}>
+    <ButtonBase style={{justifyContent:"left", textAlign:"left", borderBottom: "solid 1px rgb(204, 204, 204)", paddingTop: 5, width: "100%"}} onClick={()=>{refs.category.set(category); refs.is_choosing.set(false);}}>
       <LCRBox
         left={
-          <div style={{marginRight:5}}><Icon icon={category.icon} type={category.icon_type} color="white" bgColor={category.icon_background} size={24} /></div>
+          <CategoryIcon category={props.category_val}></CategoryIcon>
         }
         center={
-          <div>{category.text}</div>
+          <div style={{marginLeft: 5}}>{category.name}</div>
         }
         right={
           <HBox notfluid>
@@ -105,15 +107,14 @@ function CategoryItem(props) {
 }
 
 function SelectCategoriesDialog(props) {
-  const categories = useSelector(state => state.categories);
-  const refs = new RefContainer(props);
-  refs.categories = useGlobalRef("categories");
+  const refs = {...props};
+  refs.categories = usePointer("categories");
 
   return (
     <div>
       <Dialog
         onClose={props.onClose}
-        open={props.open}
+        open={props.is_choosing()}
         fullWidth={true}
       >
         <DialogTitle onClose={props.onClose}>

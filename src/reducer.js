@@ -73,7 +73,7 @@ export const initialState = {
   },
 
   _route: {
-    path: ["login"]
+    path: []
   },
 };
 

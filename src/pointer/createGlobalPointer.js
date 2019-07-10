@@ -17,7 +17,7 @@ export default function createGlobalPointer(path, value) {
     //store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: path });
     console.log("hook");
     setTimeout(()=>store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: "xxx" }), 50);
-  }, 100);
+  }, 10);
   
   if (pointerStore[path[0]] instanceof BasePointer) {
 	pointerStore[path[0]].set(value);

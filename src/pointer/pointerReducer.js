@@ -9,8 +9,9 @@ export var initialState = {
 };
 
 export function buildReducer(oldReducer) {
-  initialState = merge(initialState, oldReducer());
-  return function reducer(state, action) {
+  if (oldReducer) initialState = merge(initialState, oldReducer());
+  //console.log(initialState);
+  return function reducer(state = initialState, action) {
     switch (action.type) {
       case "$Chomtana.NewStateRef": {
         let newState = cloneDeep(state);

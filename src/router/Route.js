@@ -24,7 +24,7 @@ export default function Route(props) {
   }
 
   const show = calculateShow()
-  console.log(show)
+  //console.log(show)
 
   return show ? <props.component /> : <></>
 

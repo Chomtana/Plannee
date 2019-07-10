@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import {
   PieChart, Pie, Sector, Cell,
 } from 'recharts';
+import sumByCategory from '../action/sumByCategory';
 
 const data = [
   { name: 'Group A', value: 400 },
@@ -37,17 +38,9 @@ export default function SummaryChart(props) {
 
   var data = []
 
-  for(var category of categories) {
-    var sum = 0;
-    for(var record of records) {
-      if (record("category")("name")() == category("name")()) {
-        sum += record("value")();
-      }
-    }
-    if (sum>0) {
-      data.push({name: category("name")(), value: sum});
-    }
-  }
+  var sum_bycate = sumByCategory(records, categories);
+
+  for(var key in sum_bycate) data.push({name: key, value: sum_bycate[key]})
 
   console.log(data);
 

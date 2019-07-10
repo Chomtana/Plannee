@@ -15,7 +15,8 @@ createGlobalPointer("records",[
       name: "อาหาร และ เครื่องดื่ม"
     },
     note: "ข้าวผัดกุ้ง",
-    value: 40
+    value: 40,
+    is_revenue: 0
   },
   {
     category: {
@@ -25,7 +26,8 @@ createGlobalPointer("records",[
       name: "เครื่องแต่งกาย และ เครื่องประดับ"
     },
     note: "ซื้อเสื้อแบรนเนม",
-    value: 200
+    value: 200,
+    is_revenue: 0
   }
 ])
 
@@ -67,3 +69,19 @@ createGlobalPointer("categories",[
     name: "อื่นๆ"
   }
 ])
+
+export const record_template = {
+  category: {
+    icon: "fastfood",
+    icon_type: "material",
+    icon_background: "#ffaa00",
+    name: "อาหาร และ เครื่องดื่ม"
+  },
+  note: "",
+  value: 0,
+  is_revenue: 0
+}
+
+export const nav_title = {
+  [["goal"]]: "Saving Goal"
+}
