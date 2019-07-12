@@ -122,7 +122,7 @@ function Add(props) {
 }
 
 function Graph(props) {
-  return <Btn {...props} img="graph" link={["graph"]} />;
+  return <Btn {...props} img="graph" link={["summary"]} />;
 }
 
 function Settings(props) {

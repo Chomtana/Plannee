@@ -7,7 +7,7 @@ import ChartDetail from './../component/Summary/ChartDetail';
 import BackButton from './../component/BackButton';
 
 
-export default function Summary() {
+export default function SummaryBak() {
   const refs = new RefContainer();
   refs.records = useGlobalRef("records");
   const records = refs.records();

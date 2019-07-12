@@ -15,7 +15,7 @@ import Route from './router/Route';
 import Login_page from './screens/Login_page';
 
 import store from './store'
-import Summary from './screens/Summary';
+import Summary from './screens/Summary/index';
 import Goal from './screens/Goal/index';
 
 console.log(store);
