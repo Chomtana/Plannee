@@ -39,7 +39,7 @@ createGlobalPointer("categories",[
     name: "อาหาร และ เครื่องดื่ม"
   },
   {
-    icon: "flight",
+    icon: "travel",
     icon_type: "material",
     icon_background: "#007AFF",
     name: "การเดินทาง"

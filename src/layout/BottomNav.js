@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import RecordUpdate from "./../component/RecordUpdate";
 import usePointer from "../pointer/usePointer";
 import { record_template } from "../store";
+import globalPointer from "../pointer/globalPointer";
 
 function Btn(props) {
   return (
@@ -15,7 +16,7 @@ function Btn(props) {
       <Link to={props.link}>
         <img
           src={
-            "/img/bottomnav/" +
+            "./img/bottomnav/" +
             (props.active ? "active" : "notactive") +
             "/" +
             props.img +
@@ -41,7 +42,7 @@ function Add_Camera(props) {
 
   return (
     <div style={merge({ textAlign: "center" }, props.style)} onClick={() => {}}>
-      <img src={"/img/bottomnav/camera.png"} height={45} />
+      <img src={"./img/bottomnav/camera.png"} height={45} />
     </div>
   );
 }
@@ -56,9 +57,39 @@ function Add_Microphone(props) {
         function start() {
           window.plugins.speechRecognition.startListening(
             res => {
+              var nlpres = window.split_and_find(res);
+              if (!nlpres) {
+                alert("ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
+                return;
+              }
+              var category_name = nlpres.typeOfText;
+              var note = nlpres.text;
+              var value = nlpres.price;
+              if (!category_name) category_name = "อื่นๆ"
+
+              var category = globalPointer("categories").find({
+                name: category_name
+              })
+
+              if (category) {
+                globalPointer("records").push({
+                  category: category(),
+                  note,
+                  value,
+                  date: new Date(),
+                  is_revenue: 0
+                })
+              } else {
+                alert("ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ")
+              }
+
+              /*if (!category_name) {
+                alert("ไม่สามารถจำแนกประเภทได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
+              }*/
               //alert("Result: "+JSON.stringify(res))
-              alert("Result: " + JSON.stringify(window.split_and_find(res)));
+              //alert("Result: " + JSON.stringify(window.split_and_find(res)));
               // if res is array of string find catagories each text
+
 
               //testNetwork();
             },
@@ -72,21 +103,21 @@ function Add_Microphone(props) {
             }
           );
         }
-        alert("Test run");
+        //alert("Test run");
         if (window.plugins) {
-          alert("plugins found");
+          //alert("plugins found");
           window.plugins.speechRecognition.isRecognitionAvailable(
             () => {
-              alert("Available");
+              //alert("Available");
               window.plugins.speechRecognition.hasPermission(
                 hasPermission => {
                   if (hasPermission) {
-                    alert("Has permission");
+                    //alert("Has permission");
                     start();
                   } else {
                     window.plugins.speechRecognition.requestPermission(
                       () => {
-                        alert("Request permission success");
+                        //alert("Request permission success");
                         start();
                       },
                       () => alert("Request permission fail")
@@ -103,7 +134,7 @@ function Add_Microphone(props) {
         }
       }}
     >
-      <img src={"/img/bottomnav/microphone.png"} height={50} />
+      <img src={"./img/bottomnav/microphone.png"} height={50} />
     </div>
   );
 }
@@ -117,7 +148,7 @@ function Add_Manual(props) {
         props.isAdding.set(true);
       }}
     >
-      <img src={"/img/bottomnav/manualadd.png"} height={45} />
+      <img src={"./img/bottomnav/manualadd.png"} height={45} />
     </div>
   );
 }
@@ -162,7 +193,7 @@ function Add(props) {
     >
       <img
         src={
-          "/img/bottomnav/" +
+          "./img/bottomnav/" +
           (props.active ? "active" : "notactive") +
           "/add.png"
         }

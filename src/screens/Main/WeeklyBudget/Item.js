@@ -17,11 +17,11 @@ export default function Item(props) {
         <VBox style={{marginLeft: 20, marginRight: 20}}>
           <div>{props.category("name")()}</div>
           <div>
-            <CustomLinearProgress variant="determinate" value={50} />
+            <CustomLinearProgress variant="determinate" value={props.percent} />
           </div>
         </VBox>
       }
-      right={<div style={{alignSelf: "flex-end", marginBottom: 3}}>{props.total}</div>}
+      right={<div style={{alignSelf: "flex-end", marginBottom: 3}}>{props.sum || 0}</div>}
     />
   </div>);
 }
