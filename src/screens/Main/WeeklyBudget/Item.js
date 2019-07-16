@@ -2,18 +2,26 @@ import React from "react";
 import LCRBox from "../../../component/LCRBox";
 import VBox from "./../../../component/VBox";
 
-import CategoryIcon from './../../../component/CategoryIcon';
+import CategoryIcon from "./../../../component/CategoryIcon";
+import CustomLinearProgress from "../../../component/CustomLinearProgress";
 
 export default function Item(props) {
-  return (
+  return (<div style={props.style}>
     <LCRBox
       left={
         <div>
           <CategoryIcon category={props.category} />
         </div>
       }
-      center={<VBox />}
-      right={<div>asdasd</div>}
+      center={
+        <VBox style={{marginLeft: 20, marginRight: 20}}>
+          <div>{props.category("name")()}</div>
+          <div>
+            <CustomLinearProgress variant="determinate" value={50} />
+          </div>
+        </VBox>
+      }
+      right={<div style={{alignSelf: "flex-end", marginBottom: 3}}>{props.total}</div>}
     />
-  );
+  </div>);
 }

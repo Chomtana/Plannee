@@ -50,7 +50,59 @@ function Add_Microphone(props) {
   //console.log("add run");
 
   return (
-    <div style={merge({ textAlign: "center" }, props.style)} onClick={() => {}}>
+    <div
+      style={merge({ textAlign: "center" }, props.style)}
+      onClick={() => {
+        function start() {
+          window.plugins.speechRecognition.startListening(
+            res => {
+              //alert("Result: "+JSON.stringify(res))
+              alert("Result: " + JSON.stringify(window.split_and_find(res)));
+              // if res is array of string find catagories each text
+
+              //testNetwork();
+            },
+            err => {
+              alert("Start listening fail\n" + JSON.stringify(err));
+              //testNetwork();
+            },
+            {
+              language: "th-TH",
+              prompt: "Test prompt"
+            }
+          );
+        }
+        alert("Test run");
+        if (window.plugins) {
+          alert("plugins found");
+          window.plugins.speechRecognition.isRecognitionAvailable(
+            () => {
+              alert("Available");
+              window.plugins.speechRecognition.hasPermission(
+                hasPermission => {
+                  if (hasPermission) {
+                    alert("Has permission");
+                    start();
+                  } else {
+                    window.plugins.speechRecognition.requestPermission(
+                      () => {
+                        alert("Request permission success");
+                        start();
+                      },
+                      () => alert("Request permission fail")
+                    );
+                  }
+                },
+                () => alert("Check has permission failed")
+              );
+            },
+            () => {
+              alert("Not available");
+            }
+          );
+        }
+      }}
+    >
       <img src={"/img/bottomnav/microphone.png"} height={50} />
     </div>
   );

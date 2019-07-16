@@ -51,7 +51,7 @@ createGlobalPointer("categories",[
     name: "เครื่องแต่งกาย และ เครื่องประดับ"
   },
   {
-    icon: "shopping_basket",
+    icon: "shopping",
     icon_type: "material",
     icon_background: "#b600ff",
     name: "ข้าวของเครื่องใช้ในชีวิตประจำวัน"

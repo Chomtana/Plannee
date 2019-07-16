@@ -5,7 +5,11 @@ import BottomNav from "./BottomNav";
 export default function MainLayout(props) {
   return (
     <div>
-      <NavBar>{props.children}</NavBar>
+      <NavBar>
+        <div style={{marginBottom: 50}}>
+          {props.children}
+        </div>
+      </NavBar>
       <BottomNav></BottomNav>
     </div>
   );

@@ -41,10 +41,10 @@ const renderCustomizedLabel = ({
 export default function SummaryChart(props) {
   const maxWidth = 300;
   const width = Math.min(
-    window.innerWidth / (props.fullWidth ? 1 : 2),
+    window.innerWidth /*/ (props.fullWidth ? 1 : 2)*/,
     maxWidth
   );
-  const height = width;
+  const height = width / 1.4;
 
   const records = props.records;
   const categories = props.categories;
@@ -58,6 +58,7 @@ export default function SummaryChart(props) {
   console.log(data);
 
   return (
+    <div style={{display:"flex", justifyContent:"center"}}>
     <PieChart width={width} height={height}>
       <Pie
         data={data}
@@ -65,7 +66,7 @@ export default function SummaryChart(props) {
         cy={height / 2}
         labelLine={false}
         label={renderCustomizedLabel}
-        outerRadius={80}
+        outerRadius={width / 3.5}
         fill="#8884d8"
         dataKey="value"
       >
@@ -74,5 +75,6 @@ export default function SummaryChart(props) {
         ))}
       </Pie>
     </PieChart>
+    </div>
   );
 }

@@ -7,13 +7,13 @@ import SummaryText from "../../../component/SummaryText";
 
 export default function TodayChart(props) {
   return (
-    <HBox>
+    <VBox>
       <div>
         <SummaryChart {...props} />
       </div>
       <div>
         <SummaryText {...props} />
       </div>
-    </HBox>
+    </VBox>
   );
 }
