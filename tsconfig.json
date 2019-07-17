@@ -1,0 +1,26 @@
+{
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "jsx": "preserve",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "noEmit": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  }
+}
