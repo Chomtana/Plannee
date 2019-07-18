@@ -57,13 +57,13 @@ createGlobalPointer("categories",[
     name: "ข้าวของเครื่องใช้ในชีวิตประจำวัน"
   },
   {
-    icon: "music_video",
+    icon: "music",
     icon_type: "material",
     icon_background: "#26a500",
     name: "ความบันเทิง"
   },
   {
-    icon: "help_outline",
+    icon: "other",
     icon_type: "material",
     icon_background: "#414042",
     name: "อื่นๆ"
