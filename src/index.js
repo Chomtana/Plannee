@@ -18,6 +18,8 @@ import store from './store'
 import Summary from './screens/Summary/index';
 import Goal from './screens/Goal/index';
 
+import * as serviceWorker from './serviceWorker';
+
 console.log(store);
 
 require("./initializeFa")
@@ -57,3 +59,6 @@ if (window.plugins) {
     alert("Not available")
   });
 }
+
+//make it PWA
+serviceWorker.register();
