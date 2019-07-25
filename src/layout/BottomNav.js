@@ -57,6 +57,8 @@ function Add_Microphone(props) {
       style={merge({ textAlign: "center" }, props.style)}
       onClick={() => {
         function performAdd(res) {
+          console.log("performAdd",res);
+          
           var nlpres = window.split_and_find(res);
           if (!nlpres) {
             alert("ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
