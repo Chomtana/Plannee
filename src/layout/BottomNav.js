@@ -10,6 +10,8 @@ import usePointer from "../pointer/usePointer";
 import { record_template } from "../store";
 import globalPointer from "../pointer/globalPointer";
 
+import {map} from "lodash";
+
 function Btn(props) {
   return (
     <div style={merge({ textAlign: "center" }, props.style)}>
@@ -54,44 +56,38 @@ function Add_Microphone(props) {
     <div
       style={merge({ textAlign: "center" }, props.style)}
       onClick={() => {
+        function performAdd(res) {
+          var nlpres = window.split_and_find(res);
+          if (!nlpres) {
+            alert("ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
+            return;
+          }
+          var category_name = nlpres.typeOfText;
+          var note = nlpres.text;
+          var value = nlpres.price;
+          if (!category_name) category_name = "อื่นๆ"
+
+          var category = globalPointer("categories").find({
+            name: category_name
+          })
+
+          if (category) {
+            globalPointer("records").push({
+              category: category(),
+              note,
+              value,
+              date: new Date(),
+              is_revenue: 0
+            })
+          } else {
+            alert("ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ")
+          }
+        }
+        
         function start() {
           window.plugins.speechRecognition.startListening(
             res => {
-              var nlpres = window.split_and_find(res);
-              if (!nlpres) {
-                alert("ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
-                return;
-              }
-              var category_name = nlpres.typeOfText;
-              var note = nlpres.text;
-              var value = nlpres.price;
-              if (!category_name) category_name = "อื่นๆ"
-
-              var category = globalPointer("categories").find({
-                name: category_name
-              })
-
-              if (category) {
-                globalPointer("records").push({
-                  category: category(),
-                  note,
-                  value,
-                  date: new Date(),
-                  is_revenue: 0
-                })
-              } else {
-                alert("ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ")
-              }
-
-              /*if (!category_name) {
-                alert("ไม่สามารถจำแนกประเภทได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
-              }*/
-              //alert("Result: "+JSON.stringify(res))
-              //alert("Result: " + JSON.stringify(window.split_and_find(res)));
-              // if res is array of string find catagories each text
-
-
-              //testNetwork();
+              performAdd(res)
             },
             err => {
               alert("Start listening fail\n" + JSON.stringify(err));
@@ -116,55 +112,21 @@ function Add_Microphone(props) {
             };
             
             recognition.onerror = function(event) {
-              alert("error")
-            }
-            
-            /*recognition.onerror = function(event) {
               if (event.error == 'no-speech') {
-                start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
-                showInfo('info_no_speech');
-                ignore_onend = true;
+                alert("ขอโทษค่ะ เราไม่ได้ยินเสียงขิงคุณ")
               }
               if (event.error == 'audio-capture') {
-                start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
-                showInfo('info_no_microphone');
-                ignore_onend = true;
+                alert("กรุณาต่อไมโครโฟนด้วย เราไม่พบไมโครโฟนของคุณ")
               }
               if (event.error == 'not-allowed') {
-                if (event.timeStamp - start_timestamp < 100) {
-                  showInfo('info_blocked');
-                } else {
-                  showInfo('info_denied');
-                }
-                ignore_onend = true;
+                alert("กรุณาอนุญาตการอัดเสียงด้วย")
               }
             };
             
-            recognition.onend = function() {
-              recognizing = false;
-              if (ignore_onend) {
-                return;
-              }
-              start_img.src = '/intl/en/chrome/assets/common/images/content/mic.gif';
-              if (!final_transcript) {
-                showInfo('info_start');
-                return;
-              }
-              showInfo('');
-              if (window.getSelection) {
-                window.getSelection().removeAllRanges();
-                var range = document.createRange();
-                range.selectNode(document.getElementById('final_span'));
-                window.getSelection().addRange(range);
-              }
-              if (create_email) {
-                create_email = false;
-                createEmail();
-              }
-            };*/
-            
             recognition.onresult = function(event) {
               console.log(event.results);
+              var results = map(event.results[0],result=>result.transcript);
+              performAdd(results);
               /*var interim_transcript = '';
               if (typeof(event.results) == 'undefined') {
                 recognition.onend = null;
