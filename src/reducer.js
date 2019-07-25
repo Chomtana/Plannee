@@ -79,7 +79,7 @@ export const initialState = {
 
 function appReducer(state = initialState, action) {
   if (!action) return state;
-  console.log("reducer", state)
+  //console.log("reducer", state)
   switch (action.type) {
     case "add_record": {
       var records = cloneDeep(state.records);
@@ -121,7 +121,7 @@ function appReducer(state = initialState, action) {
       return newState;
     }
     case "$Chomtana.RefStage": {
-      console.log("startStage", state);
+      //console.log("startStage", state);
       let newState = cloneDeep(state);
       let newVal = cloneDeep(action.value);
       //console.log(newState, newVal);

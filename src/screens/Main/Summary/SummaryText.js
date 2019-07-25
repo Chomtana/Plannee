@@ -3,14 +3,18 @@ import VBox from './../../../component/VBox';
 import HBox from './../../../component/HBox';
 import {merge} from "lodash"
 import sumByCategory from "../../../action/sumByCategory";
+import usePointer from "../../../pointer/usePointer";
 
 export default function SummaryText(props) {
   var sum_by_category = sumByCategory(props.records, props.categories);
+  
+  const line_detail = usePointer("line_detail");
 
   var total = 0;
   for (var x in sum_by_category) total += sum_by_category[x];
 
   return <VBox style={merge(props.style,{marginRight: 50, paddingLeft: 20})}>
+    {line_detail("name").isReady && <div style={{fontSize: 20}}>{line_detail("name")()}</div>}
     <div style={{fontSize: 20}}>
       <HBox>
         <div style={{fontSize: 20}} ratio={2}>Balance:</div>

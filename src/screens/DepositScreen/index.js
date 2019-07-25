@@ -8,18 +8,23 @@ import { Button } from "@material-ui/core";
 import LCRBox from "../../component/LCRBox";
 import DepositDialog from "./DepositDialog";
 
+import {merge} from "lodash"
+
 function DepositControl(props) {
   const amount = useStatePointer(0);
 
   return (
-    <VBox>
+    <VBox style={{padding:10, backgroundColor: "white"}}>
       <BasicInput label="จำนวนเงินที่ออม" value={amount} fullWidth />
       <DepositDialog {...props} amount={amount}></DepositDialog>
       {false && <Button
         fullWidth
         onClick={() => {
-          props.deposit.push({ amount: amount, date: Date.now() });
+          props.deposit.push({ amount: amount(), date: Date.now() });
         }}
+        variant="contained"
+        color="primary"
+        style={{marginTop: 10}}
       >
         ออมเงิน
       </Button>}
@@ -30,21 +35,23 @@ function DepositControl(props) {
 function DepositRecord(props) {
   return (
     <LCRBox
-      left={<div>{props.record("amount")()}</div>}
-      right={
-        <div>
-          {props
-            .record("date")()
-            .toLocaleDateString()}
-        </div>
-      }
+      left={<div>{new Date(props.record("date")()).toLocaleDateString()}</div>}
+      right={<div>{props.record("amount")()}</div>}
+      style={merge({
+        borderRadius: 30,
+        color: "white",
+        backgroundColor: "#00be00",
+        padding: 10,
+        paddingTop: 15,
+        paddingBottom: 15
+      }, props.style)}
     />
   );
 }
 
 function DepositHistory(props) {
   return (
-    <VBox>
+    <VBox gap={10}>
       {props.deposit.map(record => (
         <DepositRecord record={record} {...props} />
       ))}
@@ -53,7 +60,7 @@ function DepositHistory(props) {
 }
 
 function DepositSummary(props) {
-  return <div>Summary</div>
+  return <div>Summary</div>;
 }
 
 export default function DepositScreen(props) {
@@ -62,7 +69,7 @@ export default function DepositScreen(props) {
   const more_params = { deposit };
 
   return (
-    <VBox>
+    <VBox gap={15}>
       <DepositControl {...props} {...more_params} />
       <DepositSummary {...props} {...more_params} />
       <DepositHistory {...props} {...more_params} />
