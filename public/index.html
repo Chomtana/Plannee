@@ -25,9 +25,37 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#config-web-app -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyDT9Owu3EP5IT-PB01Z7z5rNl78TDPOh-A",
+        authDomain: "planneeapp.firebaseapp.com",
+        databaseURL: "https://planneeapp.firebaseio.com",
+        projectId: "planneeapp",
+        storageBucket: "",
+        messagingSenderId: "699624833358",
+        appId: "1:699624833358:web:1500720939e44c7b"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
 
     <script src="./js/wordcut.min.js"></script>
     <script src="./js/categorynlp.js"></script>
+    
+    <script>
+      var database = firebase.database();
+    </script>
+    
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

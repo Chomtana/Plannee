@@ -13,6 +13,7 @@ import CategoryIcon from "./CategoryIcon";
 import SelectCategoriesDialog from "./SelectCategoriesDialog";
 import useStatePointer from "../pointer/useStatePointer";
 import InputLabel from "@material-ui/core/InputLabel";
+import BasicInput from "./BasicInput";
 
 function Category(props) {
   const is_choosing = useStatePointer(false);
@@ -64,13 +65,14 @@ function Value(props) {
   return (
     <LCRBox
       center={
-        <TextField
+        <BasicInput
           autoFocus
           margin="dense"
           label="ราคา"
           type="number"
-          value={props.record("value")()}
-          onChange={e => props.record("value").set(parseFloat(e.target.value))}
+          value={props.record("value")}
+          /*onChange={e => props.record("value").set(parseFloat(e.target.value))}*/
+          setWrapper={parseFloat}
           inputProps={{
             step: "any"
           }}
@@ -94,10 +96,10 @@ function Value(props) {
 
 function Note(props) {
   return (
-    <TextField
+    <BasicInput
       fullWidth
-      value={props.record("note")()}
-      onChange={e => props.record("note").set(e.target.value)}
+      value={props.record("note")}
+      /*onChange={e => props.record("note").set(e.target.value)}*/
       label="บันทึก"
     />
   );

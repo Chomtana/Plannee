@@ -103,6 +103,23 @@ function Add_Microphone(props) {
             }
           );
         }
+        
+        function doWebKit() {
+          if (('webkitSpeechRecognition' in window)) {
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            
+            recognition.onstart = function() {
+              recognizing = true;
+              showInfo('info_speak_now');
+              start_img.src = '/intl/en/chrome/assets/common/images/content/mic-animate.gif';
+            };
+          } else {
+            alert("โปรดลง app หรือใช้ browser google chrome")
+          }
+        }
+        
         //alert("Test run");
         if (window.plugins) {
           //alert("plugins found");
@@ -131,6 +148,8 @@ function Add_Microphone(props) {
               alert("Not available");
             }
           );
+        } else {
+          doWebkit();
         }
       }}
     >
