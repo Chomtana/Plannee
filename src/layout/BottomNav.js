@@ -211,11 +211,28 @@ function Add_Manual(props) {
   );
 }
 
+function Add_Deposit(props) {
+  //console.log("add run");
+  return (
+    
+      <div
+        style={merge({ textAlign: "center" }, props.style)}
+        onClick={() => {
+          //props.isAdding.set(true);
+        }}
+      >
+      <Link to={["deposit"]}>
+        <img src={"./img/bottomnav/deposit.jpg"} height={60} style={{borderRadius: "50%"}} /></Link>
+      </div>
+    
+  );
+}
+
 function AddBar(props) {
   //console.log("addbar");
   //if (!props.showAddMenu()) return null;
 
-  return (
+  return (<>
     <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
       <div
         style={{
@@ -235,7 +252,24 @@ function AddBar(props) {
         </HBox>
       </div>
     </Slide>
-  );
+    <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
+      <div
+        style={{
+          position: "fixed",
+          left: 0,
+          right: 0,
+          bottom: 120,
+          marginLeft: "auto",
+          marginRight: "auto",
+          width: 200 /* Need a specific value to work */
+        }}
+      >
+        <HBox>
+          <Add_Deposit {...props} />
+        </HBox>
+      </div>
+    </Slide>
+  </>);
 }
 
 function Add(props) {
