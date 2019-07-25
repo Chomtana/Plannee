@@ -6,6 +6,7 @@ import useStatePointer from "../../pointer/useStatePointer";
 import BasicInput from "../../component/BasicInput";
 import { Button } from "@material-ui/core";
 import LCRBox from "../../component/LCRBox";
+import DepositDialog from "./DepositDialog";
 
 function DepositControl(props) {
   const amount = useStatePointer(0);
@@ -13,14 +14,15 @@ function DepositControl(props) {
   return (
     <VBox>
       <BasicInput label="จำนวนเงินที่ออม" value={amount} fullWidth />
-      <Button
+      <DepositDialog {...props} amount={amount}></DepositDialog>
+      {false && <Button
         fullWidth
         onClick={() => {
           props.deposit.push({ amount: amount, date: Date.now() });
         }}
       >
         ออมเงิน
-      </Button>
+      </Button>}
     </VBox>
   );
 }
