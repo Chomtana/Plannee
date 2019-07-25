@@ -22,6 +22,7 @@ import Summary from './screens/Summary/index';
 import Goal from './screens/Goal/index';
 
 import * as serviceWorker from './serviceWorker';
+import DepositScreen from "./screens/DepositScreen";
 
 console.log(store);
 
@@ -37,6 +38,7 @@ function App() {
           <Route exact path={["login"]} component={Main} />
           <Route exact path={["goal"]} component={Goal} />
           <Route exact path={["home"]} component={Main} />
+          <Route exact path={["deposit"]} component={DepositScreen} />
           <Route exact path={[]} component={Main} />
         </MainLayout>
       </div>

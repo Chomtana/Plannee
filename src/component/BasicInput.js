@@ -15,7 +15,7 @@ export default class BasicInput extends React.Component {
       } else {
         this.props.value.set(this.props.setWrapper(value))
       }
-    }, 250)
+    }, 100)
 
     this.input.current.addEventListener('input', (e) => {
       //console.log(e.target.value);

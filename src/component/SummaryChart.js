@@ -55,7 +55,7 @@ export default function SummaryChart(props) {
 
   for (var key in sum_bycate) data.push({ name: key, value: sum_bycate[key] });
 
-  console.log(data);
+  //console.log(data);
 
   return (
     <div style={{display:"flex", justifyContent:"center"}}>

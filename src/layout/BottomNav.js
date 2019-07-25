@@ -280,7 +280,7 @@ export default function BottomNav(props) {
 
   const isAdding = useStatePointer(false);
 
-  console.log(route, route.length == 0 || route[0] == "home");
+  //console.log(route, route.length == 0 || route[0] == "home");
 
   return (
     <HBox

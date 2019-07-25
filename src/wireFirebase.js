@@ -18,7 +18,7 @@ export default function wireFirebase(p,name,defaultValue) {
   });
   
   p.hook("afterSetBP", (value, oldVal, pp, options) => {
-    if (!options.__firebaseSet) {
+    if (!options || !options.__firebaseSet) {
       window.database.ref(uid+"/"+name).set(p.get());
     }
   })

@@ -7,14 +7,21 @@ import globalPointer from "./pointer/globalPointer";
 
 import wireFirebase from "./wireFirebase"
 
-export default pointerStore(pointerReducer(reducer), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+var store = pointerStore(pointerReducer(reducer), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+export default store;
 
-createGlobalPointer("user_detail", {
+if (window.location.protocol.startsWith("http")) {
+  var locationfrag = window.location.pathname.split("/");
+  locationfrag = locationfrag.filter(frag=>frag != "");
+  store.dispatch({type: "$Chomtana.Router.Link", to: locationfrag})
+}
+
+var user_detail = createGlobalPointer("user_detail", {
   uid: localStorage.getItem("uid") || "testuser",
-  email: localStorage.getItem("email") || ""
+  email: localStorage.getItem("email") || "",
 });
 
-var user_detail = globalPointer("user_detail");
+var line_detail = createGlobalPointer("line_detail", false);
 
 var record = createGlobalPointer("records",[
   /*{
@@ -43,6 +50,27 @@ var record = createGlobalPointer("records",[
 
 var category = createGlobalPointer("categories",[
 ])
+
+var deposit = createGlobalPointer("deposit", [])
+
+window.liff.init(
+  data => {
+    // Now you can call LIFF API
+    const userId = data.context.userId;
+    window.liff.getProfile()
+    .then(profile => {
+      line_detail("name").set(profile.displayName);
+      line_detail("pic").set(profile.pictureUrl);
+    })
+    .catch((err) => {
+      console.log('error', err);
+    });
+  },
+  err => {
+    // LIFF initialization failed
+    console.log("this is not liff");
+  }
+);
 
 export const record_template = {
   category: {
@@ -125,4 +153,6 @@ export const nav_title = {
       name: "อื่นๆ"
     }
   ])
+  
+  wireFirebase(deposit,"deposit",[]);
 //}
