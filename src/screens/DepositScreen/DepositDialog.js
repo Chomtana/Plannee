@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -30,6 +30,10 @@ export default function DepositDialog(props) {
 
   const [saveInfoChecked, setSaveInfoChecked] = React.useState(true);
 
+  useEffect(()=> {
+    setPage(1);
+  }, [open])
+  
   function handleClickOpen() {
     setOpen(true);
   }
@@ -173,6 +177,17 @@ export default function DepositDialog(props) {
             </DialogContent>
           </>
         )}
+        
+        {page == 5 && (
+          <>
+            <DialogTitle>ทำรายการเรียบร้อย</DialogTitle>
+            <DialogContent>
+              <div style={{textAlign:"center"}}>
+                <img src="./img/check.png" width="50%"></img>
+              </div>
+            </DialogContent>
+          </>
+        )}
 
         <DialogActions>
           {page > 1 && (
@@ -190,8 +205,8 @@ export default function DepositDialog(props) {
           {(page == 1 || page >= 3) && (
             <Button
               onClick={() => {
-                if (page!=4) setPage(page + 1);
-                else {
+                if (page<4) setPage(page + 1);
+                else if (page == 4) {
                   //add value or decrease value
                   var recordvalue = parseFloat(props.record("value")())
                   console.log(value, recordvalue, props.sellMode);
@@ -208,6 +223,8 @@ export default function DepositDialog(props) {
                     props.record("value").set(recordvalue);
                   }
                   
+                  setPage(page + 1);
+                } else if (page == 5) {
                   handleClose();
                 }
               }}
