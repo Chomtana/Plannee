@@ -147,23 +147,26 @@ export const nav_title = {
   wireFirebase(deposit,"deposit",{
     "KDLTF": {
       value: 0,
+      recommend: 100000,
       //recommend() {return 100000}
     },
     "KEQRMF": {
       value: 0,
+      recommend: 2000,
       /*recommend() {
         return this.value < 1000 ? 2000 : this.value / 2;
       }*/
     },
     "SCBSETE": {
       value: 0,
-      
+      recommend: 5000,
       /*recommend() {
         return Math.max(5000, this.value * 2)
       }*/
     },
     "K70LTF": {
       value: 0,
+      recommend: 250,
       /*recommend() {
         return this.value / 2;
       }*/

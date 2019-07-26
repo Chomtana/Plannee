@@ -4,7 +4,7 @@ import VBox from "../../component/VBox";
 import usePointer from "../../pointer/usePointer";
 import useStatePointer from "../../pointer/useStatePointer";
 import BasicInput from "../../component/BasicInput";
-import { Button } from "@material-ui/core";
+import { Button, Paper } from "@material-ui/core";
 import LCRBox from "../../component/LCRBox";
 import DepositDialog from "./DepositDialog";
 
@@ -57,10 +57,24 @@ function DepositRecordBak(props) {
 }
 
 function DepositRecord(props) {
+  const value = props.record("value")();
+  const recommend = props.record("recommend")();
+  const delta = recommend - value;
+
   return (
     <LCRBox
-      style={props.style}
-      left={<div>{props.record.key}</div>}
+      style={merge(
+        { backgroundColor: delta >= 0 ? "palegreen" : "lightred", padding: 5, borderRadius: 10 }, 
+        props.style
+      )}
+      center={
+        <VBox>
+          <div>{props.record.key}</div>
+          <div>
+            {delta >= 0 ? "ควรซื้อเพิ่ม " + delta : "ควรขาย " + delta}
+          </div>
+        </VBox>
+      }
       right={
         <div style={{ whiteSpace: "nowrap" }}>
           <HBox notfluid gap={10}>
@@ -91,11 +105,14 @@ function DepositRecord(props) {
 
 function DepositHistory(props) {
   return (
-    <VBox gap={10} style={merge({ padding: 10 }, props.style)}>
-      {props.deposit.map(record => (
-        <DepositRecord record={record} {...props} />
-      ))}
-    </VBox>
+    <Paper style={{ padding: 10 }}>
+      <div style={{ fontSize: 18 }}>เลือกสรรโดย Plannee</div>
+      <VBox gap={10} style={merge({}, props.style)}>
+        {props.deposit.map(record => (
+          <DepositRecord record={record} {...props} />
+        ))}
+      </VBox>
+    </Paper>
   );
 }
 
@@ -128,7 +145,6 @@ export default function DepositScreen(props) {
 
       {false && <DepositControl {...props} {...more_params} />}
       {false && <DepositSummary {...props} {...more_params} />}
-      <div style={{fontSize: 18}}>เลือกสรรโดย Plannee</div>
       <DepositHistory {...props} {...more_params} />
 
       <div style={{ color: "red", marginTop: 10 }}>
