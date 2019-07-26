@@ -11,6 +11,7 @@ import { record_template } from "../store";
 import globalPointer from "../pointer/globalPointer";
 
 import {map} from "lodash";
+import { Dialog, Fade, DialogTitle } from "@material-ui/core";
 
 function Btn(props) {
   return (
@@ -51,6 +52,8 @@ function Add_Camera(props) {
 
 function Add_Microphone(props) {
   //console.log("add run");
+  
+  const [listeningShow,setListeningShow] = useState(false);
 
   return (
     <div
@@ -81,6 +84,7 @@ function Add_Microphone(props) {
               date: new Date(),
               is_revenue: 0
             })
+            setListeningShow(false);
           } else {
             alert("ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ")
           }
@@ -110,7 +114,8 @@ function Add_Microphone(props) {
             
             recognition.onstart = function() {
               //recognizing = true;
-              alert("start")
+              //alert("start")
+              setListeningShow(true);
             };
             
             recognition.onerror = function(event) {
@@ -123,7 +128,12 @@ function Add_Microphone(props) {
               if (event.error == 'not-allowed') {
                 alert("กรุณาอนุญาตการอัดเสียงด้วย")
               }
+              //setListeningShow(false);
             };
+            
+            recognition.onend = function(event) {
+              //setListeningShow(false);
+            }
             
             recognition.onresult = function(event) {
               console.log(event.results);
@@ -193,6 +203,12 @@ function Add_Microphone(props) {
       }}
     >
       <img src={"./img/bottomnav/microphone.png"} height={50} />
+      <Dialog
+        open={listeningShow}
+        keepMounted
+      >
+        <DialogTitle>กรุณาพูดสิ่งที่ต้องการเพิ่ม</DialogTitle>
+      </Dialog>
     </div>
   );
 }
