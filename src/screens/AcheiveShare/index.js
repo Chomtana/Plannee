@@ -9,7 +9,7 @@ export default function AcheiveShare(props) {
   return (
     <VBox>
       <div style={{textAlign: "center"}}>
-        <img src="https://www.goodnewsnetwork.org/wp-content/uploads/2015/12/Money-100-bills-CC-ree-pictures-of-money.jpg" width="50%"></img> 
+        <img src="./img/30.jpg" width="50%"></img> 
       </div>
       <div style={{textAlign: "center", fontSize: 20}}>
         {line_detail("name").isReady && <div>คุณ {line_detail("name")()}</div>}
