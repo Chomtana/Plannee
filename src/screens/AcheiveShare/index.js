@@ -15,18 +15,29 @@ export default function AcheiveShare(props) {
         {line_detail("name").isReady && <div>คุณ {line_detail("name")()}</div>}
         <div>ออมเงินได้ 30% ของเป้าหมายแล้ว</div>
         <Button variant="contained" color="primary" onClick={()=>{
+          function sendText() {
+            window.liff.sendMessages([
+              {
+                type:'text',
+                text:line_detail("name")()+' ออมเงินได้ 30% ของเป้าหมายแล้ว ลองทำตามได้เลยที่ line://app/1602354510-okPyggmE?lineuid='+encodeURIComponent(line_detail("userId")())
+              }
+            ])
+            .then(() => {
+              console.log('message sent');
+            })
+            .catch((err) => {
+              console.log('error', err);
+            });
+          }
+          
           window.liff.sendMessages([
             {
-              type:'text',
-              text:line_detail("name")()+' ออมเงินได้ 30% ของเป้าหมายแล้ว ลองทำตามได้เลยที่ line://app/1602354510-okPyggmE?lineuid='+encodeURIComponent(line_detail("userId")())
+              "type": "image",
+              "originalContentUrl": "https://admiring-mayer-fc6b08.netlify.com/img/30.jpg",
+              "previewImageUrl": "https://admiring-mayer-fc6b08.netlify.com/img/30preview.jpg"
             }
-          ])
-          .then(() => {
-            console.log('message sent');
-          })
-          .catch((err) => {
-            console.log('error', err);
-          });
+          ]).then(sendText).catch(sendText)
+
         }}>แชร์ให้เพื่อนรู้</Button>
       </div>
     </VBox>
