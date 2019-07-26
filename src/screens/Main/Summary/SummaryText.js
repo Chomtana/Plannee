@@ -15,6 +15,11 @@ export default function SummaryText(props) {
 
   return <VBox style={merge(props.style,{marginRight: 50, paddingLeft: 20})}>
     {line_detail("name").isReady && <div style={{fontSize: 20}}>{line_detail("name")()}</div>}
+    {line_detail("statusMessage").isReady && (
+        <div style={{ marginBottom: 10, fontSize: 16, color: "#999" }}>
+          {line_detail("statusMessage")()}
+        </div>
+      )}
     <div style={{fontSize: 20}}>
       <HBox>
         <div style={{fontSize: 20}} ratio={2}>Balance:</div>
