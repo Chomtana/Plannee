@@ -22,9 +22,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DepositDialog() {
+export default function DepositDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(1);
+  
+  const [value, setValue] = React.useState(0);
 
   const [saveInfoChecked, setSaveInfoChecked] = React.useState(true);
 
@@ -38,15 +40,7 @@ export default function DepositDialog() {
 
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleClickOpen}
-        fullWidth
-        style={{ marginTop: 10 }}
-      >
-        ออมเงิน
-      </Button>
+      <div onClick={handleClickOpen}>{props.button}</div>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -54,6 +48,24 @@ export default function DepositDialog() {
         onClose={handleClose}
       >
         {page == 1 && (
+          <>
+            <DialogTitle>กรุณาใส่จำนวนเงิน</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                กรุณาใส่จำนวนเงินที่คุณต้องการ{props.sellMode?"ขาย":"ออม"}
+              </DialogContentText>
+              <HBox>
+                <Button onClick={()=>setValue(300)}>300</Button>
+                <Button onClick={()=>setValue(500)}>500</Button>
+                <Button onClick={()=>setValue(700)}>700</Button>
+                <Button onClick={()=>setValue(1000)}>1000</Button>
+              </HBox>
+              <TextField label="จำนวนเงิน (บาท)" inputProps={{type: "number"}} value={value} onChange={e=>setValue(parseFloat(e.target.value))} fullWidth></TextField>
+            </DialogContent>
+          </>
+        )}
+      
+        {page == 8 && (
           <>
             <DialogTitle>ออมเงินกับกองทุน</DialogTitle>
             <DialogContent>
@@ -74,7 +86,7 @@ export default function DepositDialog() {
                 </ListItem>
                 <Divider />
                 <ListItem button onClick={() => setPage(page + 1)}>
-                  <ListItemText primary="SCBSETE " />
+                  <ListItemText primary="SCBSETE" />
                 </ListItem>
                 <Divider />
                 <ListItem button onClick={() => setPage(page + 1)}>
@@ -92,10 +104,10 @@ export default function DepositDialog() {
 
         {page == 2 && (
           <>
-            <DialogTitle>เลือกวิธีการออมเงิน</DialogTitle>
+            <DialogTitle>เลือกวิธีการ{props.sellMode?"รับ":"ออม"}เงิน</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                กรุณาเลือกวิธีการออมเงินที่คุณต้องการ
+                กรุณาเลือกวิธีการ{props.sellMode?"รับ":"ออม"}เงินที่คุณต้องการ
               </DialogContentText>
               <List
                 component="nav"
@@ -175,9 +187,30 @@ export default function DepositDialog() {
           <Button onClick={handleClose} variant="contained" color="secondary">
             ยกเลิก
           </Button>
-          {page >= 3 && (
+          {(page == 1 || page >= 3) && (
             <Button
-              onClick={() => setPage(page + 1)}
+              onClick={() => {
+                if (page!=4) setPage(page + 1);
+                else {
+                  //add value or decrease value
+                  var recordvalue = parseFloat(props.record("value")())
+                  console.log(value, recordvalue, props.sellMode);
+                  if (props.sellMode) {
+                    recordvalue -= value;
+                    if (recordvalue < 0) {
+                      alert("มีเงินออมในกองทุนนี้ไม่เพียงพอ")
+                    } else {
+                      props.record("value").set(recordvalue);
+                    }
+                  } else {
+                    recordvalue += value;
+                    console.log(recordvalue);
+                    props.record("value").set(recordvalue);
+                  }
+                  
+                  handleClose();
+                }
+              }}
               variant="contained"
               color="primary"
             >

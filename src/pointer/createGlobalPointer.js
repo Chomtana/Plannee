@@ -1,23 +1,23 @@
 import { toPath, debounce } from "lodash";
 import Pointer, { BasePointer } from "./pointer";
 import { store } from "./pointerStore";
-import globalPointer from './globalPointer';
+import globalPointer from "./globalPointer";
 
 export const pointerStore = {};
 
 window.pointerStore = pointerStore;
+
+var hook = debounce(() => {
+  //store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: path });
+  console.log("hook");
+  setTimeout(()=>store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: "xxx" }), 50);
+}, 100);
 
 export default function createGlobalPointer(path, value) {
   path = toPath(path);
   /*if (typeof pointerStore[path[0]] !== "undefined") {
     throw new Error("ReduxRef " + path + " already defined");
   }*/
-  
-  var hook = debounce(() => {
-    //store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: path });
-    console.log("hook");
-    setTimeout(()=>store.dispatch({ type: "$Chomtana.UpdateGlobalState", path: "xxx" }), 50);
-  }, 10);
   
   if (pointerStore[path[0]] instanceof BasePointer) {
 	pointerStore[path[0]].set(value);

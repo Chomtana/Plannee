@@ -61,6 +61,8 @@ window.liff.init(
     .then(profile => {
       line_detail("name").set(profile.displayName);
       line_detail("pic").set(profile.pictureUrl);
+      line_detail("userId").set(profile.userId);
+      line_detail("statusMessage").set(profile.statusMessage);
     })
     .catch((err) => {
       console.log('error', err);
@@ -118,41 +120,53 @@ export const nav_title = {
   wireFirebase(category,"categories",[
     {
       icon: "fastfood",
-      icon_type: "material",
-      icon_background: "#ffaa00",
       name: "อาหาร และ เครื่องดื่ม"
     },
     {
       icon: "travel",
-      icon_type: "material",
-      icon_background: "#007AFF",
       name: "การเดินทาง"
     },
     {
       icon: "tshirt",
-      icon_type: "fa",
-      icon_background: "#ff00a5",
       name: "เครื่องแต่งกาย และ เครื่องประดับ"
     },
     {
       icon: "shopping",
-      icon_type: "material",
-      icon_background: "#b600ff",
       name: "ข้าวของเครื่องใช้ในชีวิตประจำวัน"
     },
     {
       icon: "music",
-      icon_type: "material",
-      icon_background: "#26a500",
       name: "ความบันเทิง"
     },
     {
       icon: "other",
-      icon_type: "material",
-      icon_background: "#414042",
       name: "อื่นๆ"
     }
   ])
   
-  wireFirebase(deposit,"deposit",[]);
+  wireFirebase(deposit,"deposit",{
+    "KDLTF": {
+      value: 0,
+      recommend() {return 100000}
+    },
+    "KEQRMF": {
+      value: 0,
+      recommend() {
+        return this.value < 1000 ? 2000 : this.value / 2;
+      }
+    },
+    "SCBSETE": {
+      value: 0,
+      
+      recommend() {
+        return Math.max(5000, this.value * 2)
+      }
+    },
+    "K70LTF": {
+      value: 0,
+      recommend() {
+        return this.value / 2;
+      }
+    }
+  });
 //}
