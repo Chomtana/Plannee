@@ -18,7 +18,7 @@ export default function AcheiveShare(props) {
           window.liff.sendMessages([
             {
               type:'text',
-              text:line_detail("name")()+' ออมเงินได้ 30% ของเป้าหมายแล้ว ลองทำตามได้เลยที่ '
+              text:line_detail("name")()+' ออมเงินได้ 30% ของเป้าหมายแล้ว ลองทำตามได้เลยที่ line://app/1602354510-okPyggmE?lineuid='+encodeURIComponent(line_detail("userId")())
             }
           ])
           .then(() => {
