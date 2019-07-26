@@ -3,16 +3,18 @@ import VBox from "../../../component/VBox";
 import HBox from './../../../component/HBox';
 
 function Pic(props) {
-  return <div style={props.style}>Pic</div>;
+  return <div style={props.style}>
+    <img src="./img/retire.jpg" width="100%" style={{borderRadius: "50%"}}></img>
+  </div>;
 }
 
 function Detail(props) {
   return (
     <VBox style={props.style}>
-      <div>Fender Telecaster American Standard</div>
-      <div>Amount : 50,000</div>
-      <div>Starting Date: 10 Jun 2019</div>
-      <div>Ending Date: 10 Jun 2020</div>
+      <div>Retirement Phase 1</div>
+      <div>Amount : 12,000</div>
+      <div>Starting Date: 10 Jul 2019</div>
+      <div>Ending Date: 10 Jul 2020</div>
     </VBox>
   );
 }

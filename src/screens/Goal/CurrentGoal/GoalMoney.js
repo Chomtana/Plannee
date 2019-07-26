@@ -66,7 +66,7 @@ function Progress(props) {
     >
       <div className={classes.wrapper}>
         <div className={classes.textInProgress}>
-          2000 <br /> 4%
+          3,600 <br /> 30%
         </div>
         <CircularProgress
           size={140}
@@ -79,7 +79,7 @@ function Progress(props) {
         <CircularProgress
           size={140}
           variant="static"
-          value={20}
+          value={30}
           thickness={5}
           className={classes.fabProgress}
           style={{zIndex: 2, color: "white"}}

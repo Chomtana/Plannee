@@ -139,8 +139,13 @@ export default function DepositScreen(props) {
       )}
 
       <div>
-        การออมเงินกับกองทุนจะทำให้คุณได้รับผลตอบแทนมากกว่าการออมเงินทั่วไป
-        กรุณาเลือกกองทุนที่ต้องการ
+        <p>
+          การออมเงินกับกองทุนจะทำให้คุณได้รับผลตอบแทนมากกว่าการออมเงินทั่วไป
+          กรุณาเลือกกองทุนที่ต้องการ
+        </p>
+        <p>
+          <a href="https://www.set.or.th/education/th/online_classroom/risk.html?fbclid=IwAR2J_gl8_J5csKn5Tgtir6g5YxEDARiooizrg2B-k2XXUA0No9q8vRv1ALk">ประเมินความเสี่ยง คลิกที่นี่</a>
+        </p>
       </div>
 
       {false && <DepositControl {...props} {...more_params} />}
