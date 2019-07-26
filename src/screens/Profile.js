@@ -8,10 +8,11 @@ export default function Profile(props) {
 
   return (
     <div>
+      <BackButton></BackButton>
       {false && <ProfileContent {...props} />}
       {line_detail("pic").isReady ? (
         <div style={{ textAlign: "center" }}>
-          <img src={line_detail("pic")()} width="50%" />
+          <img src={line_detail("pic")()} width="50%" style={{borderRadius: "50%"}} />
         </div>
       ) : <div style={{fontSize: 18, textAlign: "center"}}>กรุณาใช้ Plannee line official account เพื่อเห็น Profile ของคุณ</div>}
       {line_detail("name").isReady && (

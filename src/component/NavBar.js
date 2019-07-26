@@ -78,7 +78,7 @@ export default function NavBar({ children }) {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}><Link to={["profile"]}>Profile</Link></MenuItem>
+                <Link to={["profile"]}><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
