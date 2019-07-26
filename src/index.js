@@ -23,6 +23,7 @@ import Goal from './screens/Goal/index';
 
 import * as serviceWorker from './serviceWorker';
 import DepositScreen from "./screens/DepositScreen";
+import AcheiveShare from "./screens/AcheiveShare";
 
 console.log(store);
 
@@ -39,6 +40,8 @@ function App() {
           <Route exact path={["goal"]} component={Goal} />
           <Route exact path={["home"]} component={Main} />
           <Route exact path={["deposit"]} component={DepositScreen} />
+          <Route exact path={["acheiveshare"]} component={AcheiveShare} />
+
           <Route exact path={[]} component={Main} />
         </MainLayout>
       </div>
