@@ -10,34 +10,62 @@ import usePointer from "../pointer/usePointer";
 import { record_template } from "../store";
 import globalPointer from "../pointer/globalPointer";
 
-import {map} from "lodash";
+import {
+  AccountBalanceWallet as AccountBalanceWalletIcon,
+  Home as HomeIcon,
+  MoreHoriz as MoreIcon,
+  Poll as PollIcon,
+  Stars as StarIcon
+} from "@material-ui/icons";
+
+import { map } from "lodash";
 import { Dialog, Fade, DialogTitle } from "@material-ui/core";
+import VBox from "../component/VBox";
 
 function Btn(props) {
   return (
-    <div style={merge({ textAlign: "center" }, props.style)}>
+    <div style={props.style}>
       <Link to={props.link}>
-        <img
-          src={
-            "./img/bottomnav/" +
-            (props.active ? "active" : "notactive") +
-            "/" +
-            props.img +
-            ".png"
-          }
-          height={props.height || 30}
-        />
+        <VBox style={{color: props.active ? "green" : "black"}}>
+          <div style={{ textAlign: "center" }}>
+            {props.img && (
+              <img
+                src={
+                  "./img/bottomnav/" +
+                  (props.active ? "active" : "notactive") +
+                  "/" +
+                  props.img +
+                  ".png"
+                }
+                height={props.height || 25}
+              />
+            )}
+            {props.icon && <props.icon style={{ fontSize: 30 }} />}
+          </div>
+          <div style={{ textAlign: "center" }}>{props.title}</div>
+        </VBox>
       </Link>
     </div>
   );
 }
 
 function Home(props) {
-  return <Btn {...props} img="home" link={["home"]} />;
+  return <Btn {...props} icon={HomeIcon} link={["home"]} title="Home" />;
+}
+
+function Transaction(props) {
+  return (
+    <Btn
+      {...props}
+      icon={AccountBalanceWalletIcon}
+      link={["transaction"]}
+      title="Transaction"
+    />
+  );
 }
 
 function Goal(props) {
-  return <Btn {...props} img="goal" link={["goal"]} />;
+  return <Btn {...props} icon={StarIcon} link={["goal"]} title="Saving" />;
 }
 
 function Add_Camera(props) {
@@ -52,29 +80,31 @@ function Add_Camera(props) {
 
 function Add_Microphone(props) {
   //console.log("add run");
-  
-  const [listeningShow,setListeningShow] = useState(false);
+
+  const [listeningShow, setListeningShow] = useState(false);
 
   return (
     <div
       style={merge({ textAlign: "center" }, props.style)}
       onClick={() => {
         function performAdd(res) {
-          console.log("performAdd",res);
-          
+          console.log("performAdd", res);
+
           var nlpres = window.split_and_find(res);
           if (!nlpres) {
-            alert("ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท")
+            alert(
+              "ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท"
+            );
             return;
           }
           var category_name = nlpres.typeOfText;
           var note = nlpres.text;
           var value = nlpres.price;
-          if (!category_name) category_name = "อื่นๆ"
+          if (!category_name) category_name = "อื่นๆ";
 
           var category = globalPointer("categories").find({
             name: category_name
-          })
+          });
 
           if (category) {
             globalPointer("records").push({
@@ -83,17 +113,19 @@ function Add_Microphone(props) {
               value,
               date: new Date(),
               is_revenue: 0
-            })
+            });
             setListeningShow(false);
           } else {
-            alert("ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ")
+            alert(
+              "ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ"
+            );
           }
         }
-        
+
         function start() {
           window.plugins.speechRecognition.startListening(
             res => {
-              performAdd(res)
+              performAdd(res);
             },
             err => {
               alert("Start listening fail\n" + JSON.stringify(err));
@@ -105,39 +137,39 @@ function Add_Microphone(props) {
             }
           );
         }
-        
+
         function doWebKit() {
-          if (('webkitSpeechRecognition' in window)) {
+          if ("webkitSpeechRecognition" in window) {
             var recognition = new window.webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            
+
             recognition.onstart = function() {
               //recognizing = true;
               //alert("start")
               setListeningShow(true);
             };
-            
+
             recognition.onerror = function(event) {
-              if (event.error == 'no-speech') {
-                alert("ขอโทษค่ะ เราไม่ได้ยินเสียงขิงคุณ")
+              if (event.error == "no-speech") {
+                alert("ขอโทษค่ะ เราไม่ได้ยินเสียงขิงคุณ");
               }
-              if (event.error == 'audio-capture') {
-                alert("กรุณาต่อไมโครโฟนด้วย เราไม่พบไมโครโฟนของคุณ")
+              if (event.error == "audio-capture") {
+                alert("กรุณาต่อไมโครโฟนด้วย เราไม่พบไมโครโฟนของคุณ");
               }
-              if (event.error == 'not-allowed') {
-                alert("กรุณาอนุญาตการอัดเสียงด้วย")
+              if (event.error == "not-allowed") {
+                alert("กรุณาอนุญาตการอัดเสียงด้วย");
               }
               //setListeningShow(false);
             };
-            
+
             recognition.onend = function(event) {
               //setListeningShow(false);
-            }
-            
+            };
+
             recognition.onresult = function(event) {
               console.log(event.results);
-              var results = map(event.results[0],result=>result.transcript);
+              var results = map(event.results[0], result => result.transcript);
               performAdd(results);
               /*var interim_transcript = '';
               if (typeof(event.results) == 'undefined') {
@@ -160,15 +192,14 @@ function Add_Microphone(props) {
                 showButtons('inline-block');
               }*/
             };
-            
+
             recognition.lang = "th-TH";
             recognition.start();
-            
           } else {
-            alert("โปรดลง app หรือใช้ browser google chrome")
+            alert("โปรดลง app หรือใช้ browser google chrome");
           }
         }
-        
+
         //alert("Test run");
         if (window.plugins) {
           //alert("plugins found");
@@ -203,10 +234,7 @@ function Add_Microphone(props) {
       }}
     >
       <img src={"./img/bottomnav/microphone.png"} height={50} />
-      <Dialog
-        open={listeningShow}
-        keepMounted
-      >
+      <Dialog open={listeningShow} keepMounted>
         <DialogTitle>กรุณาพูดสิ่งที่ต้องการเพิ่ม</DialogTitle>
       </Dialog>
     </div>
@@ -230,17 +258,20 @@ function Add_Manual(props) {
 function Add_Deposit(props) {
   //console.log("add run");
   return (
-    
-      <div
-        style={merge({ textAlign: "center" }, props.style)}
-        onClick={() => {
-          //props.isAdding.set(true);
-        }}
-      >
+    <div
+      style={merge({ textAlign: "center" }, props.style)}
+      onClick={() => {
+        //props.isAdding.set(true);
+      }}
+    >
       <Link to={["deposit"]}>
-        <img src={"./img/bottomnav/deposit.jpg"} height={60} style={{borderRadius: "50%"}} /></Link>
-      </div>
-    
+        <img
+          src={"./img/bottomnav/deposit.jpg"}
+          height={60}
+          style={{ borderRadius: "50%" }}
+        />
+      </Link>
+    </div>
   );
 }
 
@@ -248,44 +279,46 @@ function AddBar(props) {
   //console.log("addbar");
   //if (!props.showAddMenu()) return null;
 
-  return (<>
-    <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
-      <div
-        style={{
-          position: "fixed",
-          left: 0,
-          right: 0,
-          bottom: 60,
-          marginLeft: "auto",
-          marginRight: "auto",
-          width: 200 /* Need a specific value to work */
-        }}
-      >
-        <HBox>
-          <Add_Camera {...props} />
-          <Add_Microphone {...props} />
-          <Add_Manual {...props} />
-        </HBox>
-      </div>
-    </Slide>
-    <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
-      <div
-        style={{
-          position: "fixed",
-          left: 0,
-          right: 0,
-          bottom: 120,
-          marginLeft: "auto",
-          marginRight: "auto",
-          width: 200 /* Need a specific value to work */
-        }}
-      >
-        <HBox>
-          <Add_Deposit {...props} />
-        </HBox>
-      </div>
-    </Slide>
-  </>);
+  return (
+    <>
+      <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
+        <div
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            bottom: 60,
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: 200 /* Need a specific value to work */
+          }}
+        >
+          <HBox>
+            <Add_Camera {...props} />
+            <Add_Microphone {...props} />
+            <Add_Manual {...props} />
+          </HBox>
+        </div>
+      </Slide>
+      <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
+        <div
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            bottom: 120,
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: 200 /* Need a specific value to work */
+          }}
+        >
+          <HBox>
+            <Add_Deposit {...props} />
+          </HBox>
+        </div>
+      </Slide>
+    </>
+  );
 }
 
 function Add(props) {
@@ -293,7 +326,10 @@ function Add(props) {
 
   return (
     <div
-      style={merge({ textAlign: "center" }, props.style)}
+      style={merge(
+        { textAlign: "center", position: "fixed", bottom: 60, right: 20 },
+        props.style
+      )}
       onClick={() => {
         props.showAddMenu.set(!props.showAddMenu());
         //console.log(props.showAddMenu());
@@ -313,11 +349,13 @@ function Add(props) {
 }
 
 function Graph(props) {
-  return <Btn {...props} img="graph" link={["summary"]} />;
+  return (
+    <Btn {...props} icon={PollIcon} link={["summary"]} title="Analytics" />
+  );
 }
 
-function Settings(props) {
-  return <Btn {...props} img="settings" link={["settings"]} />;
+function More(props) {
+  return <Btn {...props} icon={MoreIcon} link={["settings"]} title="More" />;
 }
 
 export default function BottomNav(props) {
@@ -339,15 +377,20 @@ export default function BottomNav(props) {
         position: "fixed",
         bottom: 0,
         left: 0,
-        height: 50,
-        backgroundColor: "#8D8D8B"
+        height: 60,
+        backgroundColor: "#FFFFFF",
+        borderTop: "solid 1px #ccc"
       }}
     >
       <Home {...props} active={route.length == 0 || route[0] == "home"} />
-      <Goal {...props} />
+      <Transaction
+        {...props}
+        active={route.length > 0 && route[0] == "transaction"}
+      />
+      <Goal {...props} active={route.length > 0 && route[0] == "goal"} />
       <Add {...props} showAddMenu={showAddMenu} isAdding={isAdding} />
-      <Graph {...props} />
-      <Settings {...props} />
+      <Graph {...props} active={route.length > 0 && route[0] == "summary"} />
+      <More {...props} active={route.length > 0 && route[0] == "more"} />
 
       {isAdding && (
         <RecordUpdate

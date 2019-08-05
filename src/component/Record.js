@@ -16,11 +16,32 @@ function NotEditing(props) {
     <div onClick={props.onClick}>
       <LCRBox
         left={<CategoryIcon category={props.record("category")} />}
-        center={<div style={{ marginLeft: 20 }}>{props.record("note")()}</div>}
-        right={
-          <div style={{ paddingRight: 50 }}>{props.record("value")()}</div>
+        center={
+          <div style={{ marginLeft: 10 }}>
+            <b>{props.record("category.name")()}</b>
+            <br />
+            {props.record("note")()}
+          </div>
         }
-        style={merge(props.style, { height: 45, paddingLeft: 20 })}
+        right={
+          <div
+            style={{
+              paddingRight: 10,
+              color: props.record("is_revenue")() ? "green" : "red",
+              whiteSpace: "nowrap",
+              fontSize: 16
+            }}
+          >
+            {props.record("is_revenue")() ? "+ " : "- "}
+            {props.record("value")()}
+          </div>
+        }
+        style={merge(props.style, {
+          padding: 5,
+          paddingLeft: 10,
+          borderRadius: 5,
+          backgroundColor: "rgba(0,0,0,0.1)"
+        })}
       />
     </div>
   );

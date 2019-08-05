@@ -13,7 +13,10 @@ import Link from './../router/Link';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+  },
+  appbar: {
+    background: "linear-gradient(180deg, rgba(89,163,138,1) 0%, rgba(42,95,91,1) 100%);"
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -39,7 +42,7 @@ export default function NavBar({ children }) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appbar}>
         <Toolbar>
           <IconButton
             edge="start"

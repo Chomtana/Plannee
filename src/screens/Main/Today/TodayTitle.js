@@ -1,7 +1,8 @@
 import React from "react"
+import RecordGroupTitle from "../../../component/RecordGroupTitle";
 
 export default function TodayTitle(props) {
   return (
-    <div><span style={{fontSize:"14pt"}}>Today</span> 26 Jul 2019</div>
+    <RecordGroupTitle date={new Date()} style={props.style}></RecordGroupTitle>
   )
 }
