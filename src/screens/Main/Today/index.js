@@ -12,7 +12,7 @@ export default function Today(props) {
     <VBox gap={10} style={{backgroundColor:"white", padding: 10}}>
       <TodayTitle {...props} />
       {props.records.map(record => (
-        <Record record={record} hasEditMenu />
+        <Record record={record} hasEditMenu key={record.pureid} />
       ))}
       <SeeAllTransaction {...props} />
       <TodayChart {...props} />
