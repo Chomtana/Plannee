@@ -14,6 +14,7 @@ import SelectCategoriesDialog from "./SelectCategoriesDialog";
 import useStatePointer from "../pointer/useStatePointer";
 import InputLabel from "@material-ui/core/InputLabel";
 import BasicInput from "./BasicInput";
+import { DatePicker } from "@material-ui/pickers";
 
 function Category(props) {
   const is_choosing = useStatePointer(false);
@@ -105,6 +106,18 @@ function Note(props) {
   );
 }
 
+function DateInput(props) {
+  return (
+    <DatePicker
+      format="dd/MM/yyyy"
+      label="วันที่"
+      value={props.record("date")()}
+      onChange={val => props.record("date").set(val)}
+      fullWidth
+    />
+  )
+}
+
 export default function RecordUpdate(props) {
   function handleClose() {
     props.open.set(false);
@@ -128,11 +141,12 @@ export default function RecordUpdate(props) {
           {props.createMode ? "เพิ่ม" : "แก้ไข"}รายการ
         </DialogTitle>
         <DialogContent>
-          <VBox>
-            <Category {...props} />
-            <RecordType {...props} />
-            <Value {...props} />
-            <Note {...props} />
+          <VBox gap={10}>
+            <div><Category {...props} /></div>
+            <div><RecordType {...props} /></div>
+            <div><Value {...props} /></div>
+            <div><Note {...props} /></div>
+            <div><DateInput {...props} /></div>
           </VBox>
         </DialogContent>
         <DialogActions>

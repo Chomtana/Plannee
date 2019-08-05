@@ -128,8 +128,7 @@ export default function DepositScreen(props) {
   const more_params = { deposit };
 
   return (
-    <VBox gap={15}>
-      <BackButton />
+    <VBox gap={15} style={{marginBottom: 10}}>
 
       {line_detail("name").isReady && (
         <div style={{ fontSize: 18 }}>

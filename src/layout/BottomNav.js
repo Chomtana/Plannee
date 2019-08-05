@@ -379,7 +379,8 @@ export default function BottomNav(props) {
         left: 0,
         height: 60,
         backgroundColor: "#FFFFFF",
-        borderTop: "solid 1px #ccc"
+        borderTop: "solid 1px #ccc",
+        zIndex: 9999
       }}
     >
       <Home {...props} active={route.length == 0 || route[0] == "home"} />
@@ -388,7 +389,9 @@ export default function BottomNav(props) {
         active={route.length > 0 && route[0] == "transaction"}
       />
       <Goal {...props} active={route.length > 0 && route[0] == "goal"} />
-      <Add {...props} showAddMenu={showAddMenu} isAdding={isAdding} />
+      {(route.length == 0 || (route.length > 0 && (route[0] == "home" || route[0] == "transaction"))) &&
+        <Add {...props} showAddMenu={showAddMenu} isAdding={isAdding} />
+      }
       <Graph {...props} active={route.length > 0 && route[0] == "summary"} />
       <More {...props} active={route.length > 0 && route[0] == "more"} />
 

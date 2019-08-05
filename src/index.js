@@ -26,28 +26,33 @@ import DepositScreen from "./screens/DepositScreen";
 import AcheiveShare from "./screens/AcheiveShare";
 import TransactionScreen from "./screens/Transaction/TransactionScreen";
 
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+
 console.log(store);
 
 require("./initializeFa")
 
 function App() {
   return (
-    <Provider store={store}>
-      <div className="App">
-        <MainLayout>
-          <Route exact path={["summary"]} component={Summary} />
-          <Route exact path={["profile"]} component={Profile} />
-          <Route exact path={["login"]} component={Main} />
-          <Route exact path={["goal"]} component={Goal} />
-          <Route exact path={["home"]} component={Main} />
-          <Route exact path={["deposit"]} component={DepositScreen} />
-          <Route exact path={["acheiveshare"]} component={AcheiveShare} />
-          <Route exact path={["transaction"]} component={TransactionScreen} />
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Provider store={store}>
+        <div className="App">
+          <MainLayout>
+            <Route exact path={["summary"]} component={Summary} />
+            <Route exact path={["profile"]} component={Profile} />
+            <Route exact path={["login"]} component={Main} />
+            <Route exact path={["goal"]} component={Goal} />
+            <Route exact path={["home"]} component={Main} />
+            <Route exact path={["deposit"]} component={DepositScreen} />
+            <Route exact path={["acheiveshare"]} component={AcheiveShare} />
+            <Route exact path={["transaction"]} component={TransactionScreen} />
 
-          <Route exact path={[]} component={Main} />
-        </MainLayout>
-      </div>
-    </Provider>
+            <Route exact path={[]} component={Main} />
+          </MainLayout>
+        </div>
+      </Provider>
+    </MuiPickersUtilsProvider>
   );
 }
 

@@ -83,6 +83,7 @@ export const record_template = {
   },
   note: "",
   value: 0,
+  date: new Date(),
   is_revenue: 0
 }
 
