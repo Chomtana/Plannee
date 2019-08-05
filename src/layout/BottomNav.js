@@ -327,7 +327,7 @@ function Add(props) {
   return (
     <div
       style={merge(
-        { textAlign: "center", position: "fixed", bottom: 60, right: 20 },
+        { textAlign: "center", position: "fixed", bottom: 75, right: 20 },
         props.style
       )}
       onClick={() => {

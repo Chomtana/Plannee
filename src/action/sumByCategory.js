@@ -9,8 +9,10 @@ export default function sumByCategory(records, categories) {
   for(var category of categories) {
     var sum = 0;
     for(var record of records) {
-      if (record("category")("name")() == category("name")()) {
-        sum += record("value")();
+      if (!record("is_revenue")()) {
+        if (record("category")("name")() == category("name")()) {
+          sum += record("value")();
+        }
       }
     }
     if (sum>0) {

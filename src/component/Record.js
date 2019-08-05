@@ -39,7 +39,7 @@ function NotEditing(props) {
         style={merge(props.style, {
           padding: 5,
           paddingLeft: 10,
-          borderRadius: 5,
+          borderRadius: 10,
           backgroundColor: "rgba(0,0,0,0.1)"
         })}
       />
