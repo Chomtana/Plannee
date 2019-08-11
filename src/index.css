@@ -37,6 +37,16 @@ hr {
   width: calc(100% - 40px) !important;
 }
 
+.month-selector-item {
+  border-radius: 30px;
+  padding: 5px;
+}
+
+.month-selector-item.active {
+  color: white;
+  background: black;
+}
+
 /*
 .MuiButtonBase-root {
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,

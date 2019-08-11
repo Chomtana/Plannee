@@ -102,7 +102,8 @@ export const nav_title = {
       },
       note: "ข้าวผัดปู",
       value: 40,
-      is_revenue: 0
+      is_revenue: 0,
+      date: new Date()
     },
     {
       category: {
@@ -113,7 +114,8 @@ export const nav_title = {
       },
       note: "ซื้อเสื้อแบรนเนม",
       value: 200,
-      is_revenue: 0
+      is_revenue: 0,
+      date: new Date()
     }
   ])
   //wireFirebase()

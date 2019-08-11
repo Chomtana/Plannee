@@ -67,6 +67,18 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    
+    <script>
+      Date.prototype.addDays = function(days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+      }
+      
+      Date.prototype.dateEquals = function(target) {
+        return this.getFullYear() === target.getFullYear() && this.getMonth() === target.getMonth() && this.getDate() === target.getDate();
+      }
+    </script>
 
     <title>Plannee</title>
   </head>
