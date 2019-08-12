@@ -67,6 +67,7 @@ export default function SummaryChart(props) {
         labelLine={false}
         label={renderCustomizedLabel}
         outerRadius={width / 3.5}
+        innerRadius={width / 4.75}
         fill="#8884d8"
         dataKey="value"
       >

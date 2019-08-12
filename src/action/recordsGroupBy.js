@@ -8,10 +8,10 @@ export default function recordsGroupBy(records, year, month, day) {
     for(var record of records) {
       var key = new Date(record("date")()).getFullYear();
       if (!res[key]) res[key] = [];
-      res[key].push(record("date")());
+      res[key].push(record);
     }
     var keys = [];
-    for(var x in records) {
+    for(var x in res) {
       keys.push(x);
       res[x] = recordsGroupBy(res[x], false, month, day);
     }
@@ -22,10 +22,10 @@ export default function recordsGroupBy(records, year, month, day) {
     for(var record of records) {
       var key = new Date(record("date")()).getMonth() + 1;
       if (!res[key]) res[key] = [];
-      res[key].push(record("date")());    
+      res[key].push(record);    
     }
     var keys = [];
-    for(var x in records) {
+    for(var x in res) {
       keys.push(x);
       res[x] = recordsGroupBy(res[x], false, false, day);
     }
@@ -36,10 +36,10 @@ export default function recordsGroupBy(records, year, month, day) {
     for(var record of records) {
       var key = new Date(record("date")()).getDate();
       if (!res[key]) res[key] = [];
-      res[key].push(record("date")());  
+      res[key].push(record);  
     }
     var keys = [];
-    for(var x in records) {
+    for(var x in res) {
       keys.push(x);
       res[x] = recordsGroupBy(res[x], false, false, false);
     }

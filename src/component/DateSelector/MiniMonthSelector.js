@@ -10,10 +10,36 @@ const arrowStyle = {
   marginRight: 10
 }
 
+function previousMonth(monthp, yearp) {
+  var month = monthp() - 1;
+  var year = yearp();
+  
+  if (month<1) {
+    month = 12;
+    year--;
+  }
+  
+  monthp.set(month);
+  yearp.set(year);
+}
+
+function nextMonth(monthp, yearp) {
+  var month = monthp() + 1;
+  var year = yearp();
+  
+  if (month>12) {
+    month = 1;
+    year++;
+  }
+  
+  monthp.set(month);
+  yearp.set(year);
+}
+
 export default function MiniMonthSelector(props) {
   return (
     <div style={{display: "flex", flexDirection: "row"}}>
-      <div style={arrowStyle}>
+      <div style={arrowStyle} onClick={()=>previousMonth(props.selectedMonth, props.selectedYear)}>
         <b style={{fontSize: arrowStyle.fontSize}}>&lt;</b>
       </div>
       <div
@@ -23,7 +49,7 @@ export default function MiniMonthSelector(props) {
         {monthi2text(props.selectedMonth())}{" "}
         {parseInt(props.selectedYear()) + 543}
       </div>
-      <div style={arrowStyle}>
+      <div style={arrowStyle} onClick={()=>nextMonth(props.selectedMonth, props.selectedYear)}>
         <b style={{fontSize: arrowStyle.fontSize}}>&gt;</b>
       </div>
     </div>
