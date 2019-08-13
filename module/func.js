@@ -32,7 +32,7 @@ function find_catagories(text) {
 	}
 	//adding price
 	data_text.text = text.slice(0, text.length - 1).join("")
-	data_text.price = parseInt(text[text.length - 1])
+	data_text.price = parseInt(text[text.length - 1].split(",").join(""))
 	return data_text;
 }
 
