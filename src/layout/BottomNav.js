@@ -285,36 +285,18 @@ function AddBar(props) {
         <div
           style={{
             position: "fixed",
-            left: 0,
-            right: 0,
-            bottom: 60,
+            right: 15,
+            bottom: 125,
             marginLeft: "auto",
             marginRight: "auto",
-            width: 200 /* Need a specific value to work */
+            width: 50 /* Need a specific value to work */
           }}
         >
-          <HBox>
+          <VBox>
             <Add_Camera {...props} />
             <Add_Microphone {...props} />
             <Add_Manual {...props} />
-          </HBox>
-        </div>
-      </Slide>
-      <Slide direction="up" in={props.showAddMenu()} mountOnEnter unmountOnExit>
-        <div
-          style={{
-            position: "fixed",
-            left: 0,
-            right: 0,
-            bottom: 120,
-            marginLeft: "auto",
-            marginRight: "auto",
-            width: 200 /* Need a specific value to work */
-          }}
-        >
-          <HBox>
-            <Add_Deposit {...props} />
-          </HBox>
+          </VBox>
         </div>
       </Slide>
     </>
