@@ -1,3 +1,8 @@
+function split_and_find(arr)
+{
+	return find_catagories(arr);
+}
+
 function find_catagories(text) {
 	var data_name = ["อาหาร และ เครื่องดื่ม","การเดินทาง","เครื่องแต่งกาย และ เครื่องประดับ","ข้าวของเครื่องใช้ในชีวิตประจำวัน","ความบันเทิง","อื่นๆ"];
 	var data = [
