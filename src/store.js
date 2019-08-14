@@ -91,7 +91,7 @@ window.liff.init(
       user_detail("name").set(profile.displayName);
       //user_detail("email").set(user.email);
       user_detail("pic").set(profile.pictureUrl);
-      user_detail("uid").set(profile.userId);
+      user_detail("uid").set("liff_"+profile.userId);
       user_detail("loading").set(user_detail("loading")() - 1);
     })
     .catch((err) => {
