@@ -1,8 +1,12 @@
 import React from "react";
 import NavBar from "../component/NavBar";
 import BottomNav from "./BottomNav";
+import loggedin from "../action/loggedin";
+import usePointer from "../pointer/usePointer";
 
 export default function MainLayout(props) {
+  const isloggedin = loggedin(usePointer("user_detail"));
+  
   return (
     <div>
       <NavBar>
@@ -10,7 +14,7 @@ export default function MainLayout(props) {
           {props.children}
         </div>
       </NavBar>
-      <BottomNav></BottomNav>
+      {isloggedin && <BottomNav></BottomNav>}
     </div>
   );
 }

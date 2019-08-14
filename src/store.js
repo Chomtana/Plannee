@@ -5,6 +5,8 @@ import pointerStore from './pointer/pointerStore';
 import pointerReducer from './pointer/pointerReducer';
 import globalPointer from "./pointer/globalPointer";
 
+import {debounce} from "lodash";
+
 import wireFirebase from "./wireFirebase"
 
 var store = pointerStore(pointerReducer(reducer), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -20,7 +22,8 @@ var user_detail = createGlobalPointer("user_detail", {
   uid: localStorage.getItem("uid") || "testuser",
   email: localStorage.getItem("email") || "",
   pic: localStorage.getItem("pic") || null,
-  name: localStorage.getItem("name") || "Your Name"
+  name: localStorage.getItem("name") || "Your Name",
+  loading: 2
 });
 
 window.firebase.auth().onAuthStateChanged(function(user) {
@@ -30,6 +33,7 @@ window.firebase.auth().onAuthStateChanged(function(user) {
     user_detail("pic").set(user.photoURL);
     //emailVerified = user.emailVerified;
     user_detail("uid").set(user.uid);
+    user_detail("loading").set(user_detail("loading")() - 1);
   } else {
     // No user is signed in.
     user_detail("name").set("Your Name");
@@ -37,6 +41,7 @@ window.firebase.auth().onAuthStateChanged(function(user) {
     user_detail("pic").set(null);
     //emailVerified = user.emailVerified;
     user_detail("uid").set("testuser");
+    user_detail("loading").set(user_detail("loading")() - 1);
   }
 });
 
@@ -82,14 +87,22 @@ window.liff.init(
       line_detail("pic").set(profile.pictureUrl);
       line_detail("userId").set(profile.userId);
       line_detail("statusMessage").set(profile.statusMessage);
+      
+      user_detail("name").set(profile.displayName);
+      //user_detail("email").set(user.email);
+      user_detail("pic").set(profile.pictureUrl);
+      user_detail("uid").set(profile.userId);
+      user_detail("loading").set(user_detail("loading")() - 1);
     })
     .catch((err) => {
       console.log('error', err);
+      alert("LIFF Error\n"+JSON.stringify(err))
     });
   },
   err => {
     // LIFF initialization failed
     console.log("this is not liff");
+    user_detail("loading").set(user_detail("loading")() - 1);
   }
 );
 
@@ -110,7 +123,7 @@ export const nav_title = {
   [["goal"]]: "Saving Goal"
 }
 
-function initWireFirebase() {
+var initWireFirebase = debounce(() => {
   if (user_detail("uid")() && user_detail("uid")() != "testuser") {
     wireFirebase(record,"records",[
       /*{
@@ -196,7 +209,7 @@ function initWireFirebase() {
       }
     });
   }
-}
+}, 100);
 initWireFirebase();
 
-user_detail.hook("afterSetBP", ()=>setTimeout(initWireFirebase, 100));
+user_detail.hook("afterSetBP", initWireFirebase);
