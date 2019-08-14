@@ -39,6 +39,16 @@ export default function NavBar({ children }) {
   function handleClose() {
     setAnchorEl(null);
   }
+  
+  function handleLogout() {
+    window.auth.signOut().then(()=>{
+      console.log("Logout success")
+      window.location.reload();
+    }).catch(err=>{
+      console.log("Logout fail", err);
+    })
+    handleClose();
+  }
 
   return (
     <div className={classes.root}>
@@ -82,7 +92,7 @@ export default function NavBar({ children }) {
                 onClose={handleClose}
               >
                 <Link to={["profile"]}><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}

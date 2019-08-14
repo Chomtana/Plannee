@@ -28,10 +28,27 @@ import TransactionScreen from "./screens/Transaction/TransactionScreen";
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import LoginScreen from "./screens/Login/LoginScreen";
+import useStatePointer from "./pointer/useStatePointer";
+import usePointer from "./pointer/usePointer";
 
 console.log(store);
 
 require("./initializeFa")
+require("./firebaseauthui")
+
+function MainOrLoginScreen() {
+  const user_detail = usePointer("user_detail");
+  
+  if (!user_detail || !user_detail.isReady) return <LoginScreen></LoginScreen>
+  
+  const uid = user_detail("uid")();
+  //console.log(uid);
+  
+  if (!uid || uid === "testuser") return <LoginScreen></LoginScreen>
+  
+  return <Main></Main>
+}
 
 function App() {
   return (
@@ -41,14 +58,14 @@ function App() {
           <MainLayout>
             <Route exact path={["summary"]} component={Summary} />
             <Route exact path={["profile"]} component={Profile} />
-            <Route exact path={["login"]} component={Main} />
+            <Route exact path={["login"]} component={LoginScreen} />
             <Route exact path={["goal"]} component={Goal} />
             <Route exact path={["home"]} component={Main} />
             <Route exact path={["deposit"]} component={DepositScreen} />
             <Route exact path={["acheiveshare"]} component={AcheiveShare} />
             <Route exact path={["transaction"]} component={TransactionScreen} />
 
-            <Route exact path={[]} component={Main} />
+            <Route exact path={[]} component={MainOrLoginScreen} />
           </MainLayout>
         </div>
       </Provider>
