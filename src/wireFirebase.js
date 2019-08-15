@@ -3,6 +3,7 @@ import globalPointer from "./pointer/globalPointer";
 export default function wireFirebase(p,name,defaultValue) {
   var user_detail = globalPointer("user_detail");
   var uid = user_detail("uid")()
+  console.log(uid);
   
   window.database.ref(uid+"/"+name).on('value', function(snapshot) {
     if (snapshot.exists()) {

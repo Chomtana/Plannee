@@ -5,6 +5,8 @@ import pointerStore from './pointer/pointerStore';
 import pointerReducer from './pointer/pointerReducer';
 import globalPointer from "./pointer/globalPointer";
 
+import {debounce} from "lodash";
+
 import wireFirebase from "./wireFirebase"
 
 var store = pointerStore(pointerReducer(reducer), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -19,6 +21,28 @@ if (window.location.protocol.startsWith("http")) {
 var user_detail = createGlobalPointer("user_detail", {
   uid: localStorage.getItem("uid") || "testuser",
   email: localStorage.getItem("email") || "",
+  pic: localStorage.getItem("pic") || null,
+  name: localStorage.getItem("name") || "Your Name",
+  loading: 2
+});
+
+window.firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    user_detail("name").set(user.displayName);
+    user_detail("email").set(user.email);
+    user_detail("pic").set(user.photoURL);
+    //emailVerified = user.emailVerified;
+    user_detail("uid").set(user.uid);
+    user_detail("loading").set(user_detail("loading")() - 1);
+  } else {
+    // No user is signed in.
+    user_detail("name").set("Your Name");
+    user_detail("email").set("");
+    user_detail("pic").set(null);
+    //emailVerified = user.emailVerified;
+    user_detail("uid").set("testuser");
+    user_detail("loading").set(user_detail("loading")() - 1);
+  }
 });
 
 var line_detail = createGlobalPointer("line_detail", false);
@@ -63,14 +87,22 @@ window.liff.init(
       line_detail("pic").set(profile.pictureUrl);
       line_detail("userId").set(profile.userId);
       line_detail("statusMessage").set(profile.statusMessage);
+      
+      user_detail("name").set(profile.displayName);
+      //user_detail("email").set(user.email);
+      user_detail("pic").set(profile.pictureUrl);
+      user_detail("uid").set("liff_"+profile.userId);
+      user_detail("loading").set(user_detail("loading")() - 1);
     })
     .catch((err) => {
       console.log('error', err);
+      alert("LIFF Error\n"+JSON.stringify(err))
     });
   },
   err => {
     // LIFF initialization failed
     console.log("this is not liff");
+    user_detail("loading").set(user_detail("loading")() - 1);
   }
 );
 
@@ -91,88 +123,93 @@ export const nav_title = {
   [["goal"]]: "Saving Goal"
 }
 
-//if (user_detail("uid")() != "testuser") {
-  wireFirebase(record,"records",[
-    {
-      category: {
+var initWireFirebase = debounce(() => {
+  if (user_detail("uid")() && user_detail("uid")() != "testuser") {
+    wireFirebase(record,"records",[
+      /*{
+        category: {
+          icon: "fastfood",
+          icon_type: "material",
+          icon_background: "#ffaa00",
+          name: "อาหาร และ เครื่องดื่ม"
+        },
+        note: "ข้าวผัดปู",
+        value: 40,
+        is_revenue: 0,
+        date: new Date()
+      },
+      {
+        category: {
+          icon: "tshirt",
+          icon_type: "fa",
+          icon_background: "#ff00a5",
+          name: "เครื่องแต่งกาย และ เครื่องประดับ"
+        },
+        note: "ซื้อเสื้อแบรนเนม",
+        value: 200,
+        is_revenue: 0,
+        date: new Date()
+      }*/
+    ])
+    //wireFirebase()
+    
+    wireFirebase(category,"categories",[
+      {
         icon: "fastfood",
-        icon_type: "material",
-        icon_background: "#ffaa00",
         name: "อาหาร และ เครื่องดื่ม"
       },
-      note: "ข้าวผัดปู",
-      value: 40,
-      is_revenue: 0,
-      date: new Date()
-    },
-    {
-      category: {
+      {
+        icon: "travel",
+        name: "การเดินทาง"
+      },
+      {
         icon: "tshirt",
-        icon_type: "fa",
-        icon_background: "#ff00a5",
         name: "เครื่องแต่งกาย และ เครื่องประดับ"
       },
-      note: "ซื้อเสื้อแบรนเนม",
-      value: 200,
-      is_revenue: 0,
-      date: new Date()
-    }
-  ])
-  //wireFirebase()
-  
-  wireFirebase(category,"categories",[
-    {
-      icon: "fastfood",
-      name: "อาหาร และ เครื่องดื่ม"
-    },
-    {
-      icon: "travel",
-      name: "การเดินทาง"
-    },
-    {
-      icon: "tshirt",
-      name: "เครื่องแต่งกาย และ เครื่องประดับ"
-    },
-    {
-      icon: "shopping",
-      name: "ข้าวของเครื่องใช้ในชีวิตประจำวัน"
-    },
-    {
-      icon: "music",
-      name: "ความบันเทิง"
-    },
-    {
-      icon: "other",
-      name: "อื่นๆ"
-    }
-  ])
-  
-  wireFirebase(deposit,"deposit",{
-    "กองทุน KDLTF": {
-      value: 0,
-      recommend: 100000,
-      //recommend() {return 100000}
-    },
-    /*"KEQRMF": {
-      value: 0,
-      recommend: 2000,
-      recommend() {
-        return this.value < 1000 ? 2000 : this.value / 2;
+      {
+        icon: "shopping",
+        name: "ข้าวของเครื่องใช้ในชีวิตประจำวัน"
+      },
+      {
+        icon: "music",
+        name: "ความบันเทิง"
+      },
+      {
+        icon: "other",
+        name: "อื่นๆ"
       }
-    },*/
-    "ตราสารหนี้": {
-      value: 0,
-      recommend: 5000,
-      /*recommend() {
-        return Math.max(5000, this.value * 2)
-      }*/
-    },
-    "แนะนำซื้อประกันชีวิต AXA": {
-      value: 0,
-      recommend: 0,
-      /*recommend() {
-        return this.value / 2;
-      }*/
-    }
-  });
-//}
+    ])
+    
+    wireFirebase(deposit,"deposit",{
+      "กองทุน KDLTF": {
+        value: 0,
+        recommend: 100000,
+        //recommend() {return 100000}
+      },
+      /*"KEQRMF": {
+        value: 0,
+        recommend: 2000,
+        recommend() {
+          return this.value < 1000 ? 2000 : this.value / 2;
+        }
+      },*/
+      "ตราสารหนี้": {
+        value: 0,
+        recommend: 5000,
+        /*recommend() {
+          return Math.max(5000, this.value * 2)
+        }*/
+      },
+      "แนะนำซื้อประกันชีวิต AXA": {
+        value: 0,
+        recommend: 0,
+        /*recommend() {
+          return this.value / 2;
+        }*/
+      }
+    });
+  }
+}, 100);
+initWireFirebase();
+
+user_detail.hook("afterSetBP", initWireFirebase);

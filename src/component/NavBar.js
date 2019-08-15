@@ -10,6 +10,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Link from './../router/Link';
+import loggedin from "../action/loggedin";
+import usePointer from "../pointer/usePointer";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +30,11 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavBar({ children }) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  //const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  
+  const isloggedin = loggedin(usePointer("user_detail"));
 
   function handleMenu(event) {
     setAnchorEl(event.currentTarget);
@@ -38,6 +42,16 @@ export default function NavBar({ children }) {
 
   function handleClose() {
     setAnchorEl(null);
+  }
+  
+  function handleLogout() {
+    window.auth.signOut().then(()=>{
+      console.log("Logout success")
+      window.location.reload();
+    }).catch(err=>{
+      console.log("Logout fail", err);
+    })
+    handleClose();
   }
 
   return (
@@ -55,7 +69,7 @@ export default function NavBar({ children }) {
           <Typography variant="h6" className={classes.title}>
             Plannee
           </Typography>
-          {auth && (
+          {isloggedin && (
             <div>
               <IconButton
                 aria-label="Account of current user"
@@ -82,7 +96,7 @@ export default function NavBar({ children }) {
                 onClose={handleClose}
               >
                 <Link to={["profile"]}><MenuItem onClick={handleClose}>Profile</MenuItem></Link>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}
