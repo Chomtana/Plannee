@@ -1,0 +1,21 @@
+<html>
+
+<head>
+</head>
+
+<body>
+  <input type="text" id="box" value="กากา" onsubmit=showCatagory() />
+  <span id="out"></span>
+
+
+  <script src="wordcut-min.js"></script>
+  <script src="func.js"></script>
+
+  <script>
+    showCatagory = () => {
+      console.log(find_catagories(document.getElementById('box').value))
+    }
+  </script>
+</body>
+
+</html>

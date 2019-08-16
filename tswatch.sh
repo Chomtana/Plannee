@@ -1,0 +1,1 @@
+tsc -p tsconfig-real.json --watch
