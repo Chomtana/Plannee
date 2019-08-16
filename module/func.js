@@ -1,6 +1,6 @@
 /*
 
-Version : Plannee_demo_stank_fah_15082562 and Chomtana
+Version : Plannee_demo_stank_fah_15082562
 
 */
 
