@@ -89,14 +89,59 @@ function Add_Microphone(props) {
       onClick={() => {
         function performAdd(res) {
           console.log("performAdd", res);
+<<<<<<< HEAD
+          
+          console.log(res)
+          var nlpresarr = window.dataS(res[0]);
+          if (!nlpresarr) {
+=======
 
           var nlpres = window.split_and_find(res);
           if (!nlpres) {
+>>>>>>> f31c12dc428da26d35fee84c028702ff8a7516e2
             alert(
               "ไม่สามารถถอดคำพูดได้ กรุณาพูดใหม่ ตัวอย่างการพูด: กินข้าวไข่เจียว 30 บาท"
             );
             return;
           }
+<<<<<<< HEAD
+
+          console.log(nlpresarr)
+
+          for(var nlpres of nlpresarr) {
+            console.log(nlpres)
+
+            var category_name = nlpres.typeOfText;
+            var note = nlpres.text;
+            var value = Math.abs(nlpres.price);
+            if (!category_name) category_name = "อื่นๆ";
+
+            var category = globalPointer("categories").find({
+              name: category_name
+            });
+
+            if (category) {
+              console.log({
+                category: category(),
+                note,
+                value,
+                date: new Date(),
+                is_revenue: (nlpres.price>0)
+              })
+              globalPointer("records").push({
+                category: category(),
+                note,
+                value,
+                date: new Date(),
+                is_revenue: (nlpres.price>0)
+              });
+              setListeningShow(false);
+            } else {
+              alert(
+                "ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ"
+              );
+            }
+=======
           var category_name = nlpres.typeOfText;
           var note = nlpres.text;
           var value = nlpres.price;
@@ -119,6 +164,7 @@ function Add_Microphone(props) {
             alert(
               "ระบบเกิดความผิดพลาดในขั้นตอนการเชื่อมโยงหมวดหมู่ที่เก็บไว้ในระบบ"
             );
+>>>>>>> f31c12dc428da26d35fee84c028702ff8a7516e2
           }
         }
 
@@ -152,7 +198,11 @@ function Add_Microphone(props) {
 
             recognition.onerror = function(event) {
               if (event.error == "no-speech") {
+<<<<<<< HEAD
+                alert("ขอโทษค่ะ เราไม่ได้ยินเสียงของคุณ");
+=======
                 alert("ขอโทษค่ะ เราไม่ได้ยินเสียงขิงคุณ");
+>>>>>>> f31c12dc428da26d35fee84c028702ff8a7516e2
               }
               if (event.error == "audio-capture") {
                 alert("กรุณาต่อไมโครโฟนด้วย เราไม่พบไมโครโฟนของคุณ");
