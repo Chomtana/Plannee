@@ -30,7 +30,7 @@ function find_catagories(text) {
 		text[i] = text[i].trim()
 
 
-	var key_receive = ["ได้", "รับ"]
+	var key_receive = ["ได้", "รับ", "ขาย"]
 	var val_receive = -1
 
 	for (var i = 0; i < text.length; i++) {
@@ -42,8 +42,6 @@ function find_catagories(text) {
 		if (val_receive == 1) break
 	}
 
-
-	//console.log(text)
 
 	//checking type
 	for (var k = 0; k < text.length; k++) {
@@ -76,17 +74,6 @@ function splitData(data) { //Split data by number
 			ins = i + 1
 		}
 	}
-
-	// for (var i = 0; i < data.length - 1; i++) {
-	// 	if (num.test(data[i])) {
-	// 		if (!num.test(data[i + 1])) {
-	// 			dataAll.push(data.slice(ins, i + 1))
-	// 			ins = i + 1
-	// 		}
-	// 	}
-	// }
-
-	//console.log(dataAll)
 	return dataAll
 }
 
@@ -104,7 +91,6 @@ function conclude_date(new_text) {
 					i++
 				return [Next_Date(key_val[j]), i]
 			}
-
 	}
 	return [Next_Date(0), -1]
 }
@@ -132,7 +118,6 @@ function dataS(text) { //main function for transaction
 	var Date_val = conclude_date(new_text)
 
 	new_text = new_text.splice(Date_val[1] + 1, new_text.length)
-
 
 	splitData(new_text).forEach(e => {
 		var temp_dat = find_catagories(e)
